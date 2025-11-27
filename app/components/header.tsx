@@ -3,17 +3,17 @@ import Link from "next/link";
 export default function Header() {
   return (
     <div
-      className="mx-auto px-6 py-8"
+      className="mx-auto px-4 sm:px-6 py-6"
       style={{
         background:
           "linear-gradient(135deg, #1e40af 0%, #3b82f6 40%, #06b6d4 100%)",
       }}
     >
-      <div className="flex items-center justify-between container mx-auto">
+      <div className="flex flex-col md:flex-row items-center justify-between container mx-auto gap-4 md:gap-0">
         {/* Left Section */}
-        <div>
+        <div className="text-center md:text-left">
           <h1
-            className="text-5xl font-semibold text-white mb-2"
+            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-2"
             style={{
               textShadow:
                 "0 4px 24px rgba(30,64,175,0.7), 0 2px 8px rgba(0,0,0,0.6), 0 1px 1px rgba(0,0,0,0.3)",
@@ -21,11 +21,13 @@ export default function Header() {
           >
             FPPCD
           </h1>
-          <p className="text-blue-100 text-lg">Planning Conditions Extractor</p>
+          <p className="text-blue-100 text-base sm:text-lg">
+            Planning Conditions Extractor
+          </p>
         </div>
 
         {/* Right Section */}
-        <div className="flex items-center gap-6">
+        <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-6">
           <span className="text-blue-100">
             Welcome, <span className="text-white font-medium">Mark S</span>
           </span>
