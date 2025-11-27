@@ -7,12 +7,10 @@ export const metadata: Metadata = {
 export default function LoginPage() {
   return (
     <div
-      className="relative min-h-screen flex items-center justify-center bg-gray-100"
+      className="relative min-h-screen flex items-center justify-center bg-gray-100 bg-cover bg-center"
       style={{
         backgroundImage:
           'url("https://images.unsplash.com/photo-1734554566930-b00065c543c7?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3Nzg4Nzd8MHwxfHNlYXJjaHwxfHxHZW9yZ2lhbiUyMHRvd25ob3VzZSUyMExvbmRvbiUyMGhlcml0YWdlfGVufDF8fHx8MTc1ODI3MTA3NHww&ixlib=rb-4.1.0&q=80&w=1080")',
-        backgroundSize: "cover",
-        backgroundPosition: "center",
       }}
     >
       {/* Gradient overlay */}
@@ -25,7 +23,13 @@ export default function LoginPage() {
         }}
       />
       <div className="relative z-10">
-        <h2 className="text-6xl text-shadow-lg font-bold mb-6 text-white text-center">
+        <h2
+          className="text-6xl font-bold mb-6 text-white text-center"
+          style={{
+            textShadow:
+              "0 4px 24px rgba(30,64,175,0.7), 0 2px 8px rgba(0,0,0,0.6), 0 1px 1px rgba(0,0,0,0.3)",
+          }}
+        >
           FPPCD
         </h2>
         <p className="text-center text-white text-lg font-semibold mb-2">
@@ -37,7 +41,9 @@ export default function LoginPage() {
 
         <div className="bg-white p-6 rounded-2xl shadow-md w-full lg:max-w-[500px]">
           <form className="space-y-5">
-            <h2 className="text-2xl  mb-2 text-center">Sign In</h2>
+            <h2 className="text-2xl  mb-2 text-center text-gray-800">
+              Sign In
+            </h2>
             <p className="text-center text-md text-gray-500 mb-2">
               Enter your credentials to access the planning conditions tool
             </p>
@@ -45,39 +51,60 @@ export default function LoginPage() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold text-gray-700"
               >
                 Email
               </label>
               <input
                 type="email"
                 id="email"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-11"
                 placeholder="Enter your email"
                 required
               />
             </div>
+
             <div>
               <label
                 htmlFor="password"
-                className="block text-sm font-medium text-gray-700"
+                className="block text-sm font-semibold text-gray-700"
               >
                 Password
               </label>
               <input
                 type="password"
                 id="password"
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-11"
                 placeholder="Enter your password"
                 required
               />
             </div>
+
             <button
               type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold"
+              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm"
             >
               Sign In
             </button>
+
+            <div className="flex flex-col items-center  space-y-2">
+              <a
+                href="forgot-password"
+                className="text-blue-600 hover:underline text-md font-semibold mb-3"
+              >
+                Forgot password?
+              </a>
+
+              <span className=" text-gray-600 text-md">
+                Don&apos;t have an account?{" "}
+                <a
+                  href="/signup"
+                  className="text-blue-600 hover:underline font-semibold"
+                >
+                  Sign up
+                </a>
+              </span>
+            </div>
           </form>
         </div>
       </div>
