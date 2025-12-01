@@ -1,11 +1,26 @@
-import { Metadata } from "next";
-import Link from "next/link";
-
-export const metadata: Metadata = {
-  title: "Login - FPPCD",
-};
+"use client";
+import { useState } from "react";
+import { signIn } from "next-auth/react";
 
 export default function LoginPage() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    const res = await signIn("credentials", {
+      redirect: false,
+      username: email,
+      password,
+    });
+    if (res?.error) {
+      setError("Invalid credentials");
+    } else {
+      window.location.href = "/";
+    }
+  };
   return (
     <div
       className="relative min-h-screen flex items-center justify-center bg-gray-100 bg-cover bg-center"
@@ -41,7 +56,7 @@ export default function LoginPage() {
         </p>
 
         <div className="bg-white p-6 rounded-2xl shadow-md w-full lg:max-w-[500px]">
-          <form className="space-y-5">
+          <form className="space-y-5" onSubmit={handleSubmit}>
             <h2 className="text-2xl  mb-2 text-center text-gray-800">
               Sign In
             </h2>
@@ -57,10 +72,12 @@ export default function LoginPage() {
                 Email
               </label>
               <input
-                type="email"
+                type="text"
                 id="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-11"
-                placeholder="Enter your email"
+                placeholder="Enter your username"
                 required
               />
             </div>
@@ -75,18 +92,25 @@ export default function LoginPage() {
               <input
                 type="password"
                 id="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
                 className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-11"
                 placeholder="Enter your password"
                 required
               />
             </div>
 
-            <Link
-              href="/"
+            <button
+              type="submit"
               className="w-full bg-blue-600 flex justify-center items-center text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm"
             >
               Sign In
-            </Link>
+            </button>
+            {error && (
+              <div className="text-red-600 text-center text-sm font-semibold">
+                {error}
+              </div>
+            )}
 
             <div className="flex flex-col items-center  space-y-2">
               <a
