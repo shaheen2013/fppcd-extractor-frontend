@@ -136,6 +136,7 @@ export default function PlanningApplicationsReport() {
               </svg>
               Print
             </Button>
+
             <Button
               variant="outline"
               className="font-semibold hover:bg-transparent"
@@ -159,6 +160,7 @@ export default function PlanningApplicationsReport() {
               </svg>
               CSV
             </Button>
+
             <Button
               variant="outline"
               className="font-semibold hover:bg-transparent"
@@ -187,41 +189,51 @@ export default function PlanningApplicationsReport() {
           </div>
         </div>
 
-        <div className="px-6 pb-6">
-          <p className="text-gray-600 mb-4">
-            Found 3 applications matching your selected conditions
-          </p>
-
-          <input
-            type="text"
-            placeholder="Search applications..."
-            className="w-full border rounded-lg p-2 mb-4"
-          />
+        <div className="px-6 py-6">
+          <div className="relative mb-4">
+            <input
+              type="text"
+              placeholder="Search applications..."
+              className="w-full border rounded-lg p-2 pl-10 input-bootstrap placeholder:font-light placeholder:text-gray-600"
+            />
+            <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="18"
+                height="18"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
+              </svg>
+            </span>
+          </div>
 
           <div className="overflow-x-auto">
             <table className="w-full text-left border-collapse">
-              <thead>
-                <tr className="border-b text-gray-600">
-                  <th className="p-3">Application Name</th>
-                  <th className="p-3">Address</th>
-                  <th className="p-3">Conditions</th>
-                  <th className="p-3">Status</th>
-                  <th className="p-3">Contacted</th>
-                  <th className="p-3">Actions</th>
+              <thead className="bg-[#F7F9FB] text-sm">
+                <tr className="border-b text-gray-900">
+                  <th className="p-2 font-medium">Application Name</th>
+                  <th className="p-2 font-medium">Address</th>
+                  <th className="p-2 font-medium">Conditions</th>
+                  <th className="p-2 font-medium">Status</th>
+                  <th className="p-2 font-medium">Contacted</th>
+                  <th className="p-2 font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {applications.map((app, idx) => (
                   <tr key={idx} className="border-b hover:bg-gray-50">
-                    <td className="p-3 font-medium text-blue-800">
-                      {app.name}
-                    </td>
-                    <td className="p-3 text-gray-700">{app.address}</td>
+                    <td className="p-3 font-medium text-sm">{app.name}</td>
+                    <td className="p-3 font-medium text-sm">{app.address}</td>
                     <td className="p-3 flex flex-wrap gap-2">
                       {app.conditions.map((c, i) => (
                         <span
                           key={i}
-                          className="bg-blue-100 text-blue-700 px-2 py-1 rounded-full text-sm"
+                          className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
                         >
                           {c}
                         </span>
@@ -229,10 +241,10 @@ export default function PlanningApplicationsReport() {
                     </td>
                     <td className="p-3">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm ${
+                        className={`px-3 py-1 rounded-md text-xs font-semibold ${
                           app.status === "Approved"
-                            ? "bg-green-100 text-green-700"
-                            : "bg-red-100 text-red-700"
+                            ? "bg-green-100 text-green-800"
+                            : "bg-red-100 text-red-800"
                         }`}
                       >
                         {app.status}
@@ -240,9 +252,9 @@ export default function PlanningApplicationsReport() {
                     </td>
                     <td className="p-3">
                       <span
-                        className={`px-3 py-1 rounded-full text-sm ${
+                        className={`px-3 py-1 rounded-md text-xs font-semibold ${
                           app.contacted === "Yes"
-                            ? "bg-green-100 text-green-700"
+                            ? "bg-green-100 text-green-800"
                             : "bg-gray-200 text-gray-600"
                         }`}
                       >
@@ -251,11 +263,19 @@ export default function PlanningApplicationsReport() {
                     </td>
                     <td className="p-3">
                       {app.contacted === "No" ? (
-                        <Button className="bg-green-600 text-white hover:bg-green-700">
+                        <Button
+                          className="text-green-700 bg-transparent border border-green-500
+                            hover:text-black hover:bg-green-50
+                        "
+                        >
                           Mark as Contacted
                         </Button>
                       ) : (
-                        <Button className="bg-red-600 text-white hover:bg-red-700">
+                        <Button
+                          className="text-red-600 bg-transparent border border-red-400
+                            hover:text-black hover:bg-red-50
+                        "
+                        >
                           Mark as Not Contacted
                         </Button>
                       )}
