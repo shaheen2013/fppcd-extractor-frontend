@@ -1,4 +1,7 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 
 export default function Header() {
@@ -32,12 +35,14 @@ export default function Header() {
           <span className="text-blue-100">
             Welcome, <span className="text-white font-medium">Mark S</span>
           </span>
-          <Link
-            href="/login"
+          <button
+            onClick={() => {
+              signOut();
+            }}
             className="bg-white/20 hover:bg-white/30 text-white px-4 py-2 rounded-lg transition-all duration-200 backdrop-blur-sm border border-white/50"
           >
             Logout
-          </Link>
+          </button>
         </div>
       </div>
     </div>
