@@ -231,7 +231,7 @@ export default function PlanningApplicationsReport() {
                   {applications.map((app, idx) => (
                     <tr key={idx} className="border-b hover:bg-gray-50">
                       <td className="p-3 font-medium text-sm">{app.name}</td>
-                      <td className="p-3 font-medium text-sm">{app.address}</td>
+                      <td className="p-3 font-normal text-sm">{app.address}</td>
                       <td className="p-3 flex flex-wrap gap-2">
                         {app.conditions.map((c, i) => (
                           <span
