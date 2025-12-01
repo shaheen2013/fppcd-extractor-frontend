@@ -1,9 +1,10 @@
+import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
 export default function Header() {
   return (
     <div
-      className="mx-auto px-4 sm:px-6 py-6"
+      className="mx-auto px-4 sm:px-6 py-6 sticky top-0"
       style={{
         background:
           "linear-gradient(135deg, #1e40af 0%, #3b82f6 40%, #06b6d4 100%)",
@@ -13,7 +14,7 @@ export default function Header() {
         {/* Left Section */}
         <div className="text-center md:text-left">
           <h1
-            className="text-3xl sm:text-4xl md:text-5xl font-semibold text-white mb-2"
+            className="text-3xl md:text-4xl font-semibold text-white mb-2"
             style={{
               textShadow:
                 "0 4px 24px rgba(30,64,175,0.7), 0 2px 8px rgba(0,0,0,0.6), 0 1px 1px rgba(0,0,0,0.3)",

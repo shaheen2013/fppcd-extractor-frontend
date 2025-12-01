@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Login - FPPCD",
@@ -80,12 +81,12 @@ export default function LoginPage() {
               />
             </div>
 
-            <button
-              type="submit"
-              className="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm"
+            <Link
+              href="/"
+              className="w-full bg-blue-600 flex justify-center items-center text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm"
             >
               Sign In
-            </button>
+            </Link>
 
             <div className="flex flex-col items-center  space-y-2">
               <a
