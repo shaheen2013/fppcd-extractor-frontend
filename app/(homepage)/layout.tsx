@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
-import Header from "../components/header";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,5 +16,5 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  return <div className="">{children}</div>;
+  return <div className={inter.className}>{children}</div>;
 }
