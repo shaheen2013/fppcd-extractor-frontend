@@ -7,7 +7,7 @@ import Link from "next/link";
 export default function Header() {
   return (
     <div
-      className="mx-auto px-4 sm:px-6 py-6 sticky top-0"
+      className="mx-auto px-4 sm:px-6 py-6 sticky top-0 z-50"
       style={{
         background:
           "linear-gradient(135deg, #1e40af 0%, #3b82f6 40%, #06b6d4 100%)",
