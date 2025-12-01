@@ -1,6 +1,10 @@
 "use client";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import {
+  useVerifyOtpMutation,
+  useResendOtpMutation,
+} from "@/lib/store/services/authApi";
 
 export default function VerifyOTPPage() {
   const router = useRouter();
@@ -9,7 +13,11 @@ export default function VerifyOTPPage() {
 
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
-  const [loading, setLoading] = useState(false);
+
+  const [verifyOtp, { isLoading: isVerifying }] = useVerifyOtpMutation();
+  const [resendOtp, { isLoading: isResending }] = useResendOtpMutation();
+
+  const loading = isVerifying || isResending;
 
   const handleChange = (index: number, value: string) => {
     if (value.length > 1) return;
@@ -42,56 +50,34 @@ export default function VerifyOTPPage() {
       return;
     }
 
-    setLoading(true);
-
     try {
-      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const res = await fetch(`${BACKEND_URL}/auth/verify-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email,
-          otp: otpCode,
-        }),
-      });
+      const result = await verifyOtp({
+        email,
+        otp: otpCode,
+      }).unwrap();
 
-      const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.message || "Invalid OTP");
-        setLoading(false);
-        return;
+      if (result.success) {
+        // Redirect to login or home after successful verification
+        router.push("/login");
       }
-
-      // Redirect to login or home after successful verification
-      router.push("/login");
-    } catch {
-      setError("An error occurred. Please try again.");
-      setLoading(false);
+    } catch (err) {
+      const error = err as { data?: { message?: string } };
+      setError(error?.data?.message || "Invalid OTP");
     }
   };
 
   const handleResendOTP = async () => {
     setError("");
-    setLoading(true);
 
     try {
-      const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
-      const res = await fetch(`${BACKEND_URL}/auth/resend-otp`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
+      const result = await resendOtp({ email }).unwrap();
 
-      if (res.ok) {
+      if (result.success) {
         alert("OTP has been resent to your email");
-      } else {
-        setError("Failed to resend OTP");
       }
-    } catch {
-      setError("An error occurred. Please try again.");
-    } finally {
-      setLoading(false);
+    } catch (err) {
+      const error = err as { data?: { message?: string } };
+      setError(error?.data?.message || "Failed to resend OTP");
     }
   };
 
