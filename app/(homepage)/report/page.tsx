@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -58,9 +60,9 @@ export default function PlanningApplicationsReport() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="mr-1"
               aria-hidden="true"
             >
@@ -107,7 +109,14 @@ export default function PlanningApplicationsReport() {
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" className="font-semibold">
+            <Button
+              variant="outline"
+              className="font-semibold hover:bg-transparent"
+              onClick={() => {
+                // print the page
+                print();
+              }}
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -115,9 +124,9 @@ export default function PlanningApplicationsReport() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-printer mr-1 h-4 w-4"
                 aria-hidden="true"
               >
@@ -127,7 +136,10 @@ export default function PlanningApplicationsReport() {
               </svg>
               Print
             </Button>
-            <Button variant="outline" className="font-semibold">
+            <Button
+              variant="outline"
+              className="font-semibold hover:bg-transparent"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -135,9 +147,9 @@ export default function PlanningApplicationsReport() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-download mr-1 h-4 w-4"
                 aria-hidden="true"
               >
@@ -147,7 +159,10 @@ export default function PlanningApplicationsReport() {
               </svg>
               CSV
             </Button>
-            <Button variant="outline" className="font-semibold">
+            <Button
+              variant="outline"
+              className="font-semibold hover:bg-transparent"
+            >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -155,9 +170,9 @@ export default function PlanningApplicationsReport() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-file-text mr-1 h-4 w-4"
                 aria-hidden="true"
               >
