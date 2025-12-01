@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 
-export default function Header() {
+export default function Header({ subtitle }: { subtitle?: string }) {
   return (
     <div
       className="mx-auto px-4 sm:px-6 py-6 sticky top-0 z-50"
@@ -16,7 +16,8 @@ export default function Header() {
       <div className="flex flex-col md:flex-row items-center justify-between container mx-auto gap-4 md:gap-0">
         {/* Left Section */}
         <div className="text-center md:text-left">
-          <h1
+          <Link
+            href="/"
             className="text-3xl md:text-4xl font-semibold text-white mb-2"
             style={{
               textShadow:
@@ -24,9 +25,9 @@ export default function Header() {
             }}
           >
             FPPCD
-          </h1>
-          <p className="text-blue-100 text-base sm:text-lg">
-            Planning Conditions Extractor
+          </Link>
+          <p className="text-white text-shadow-lg text-base sm:text-lg font-light">
+            {subtitle}
           </p>
         </div>
 

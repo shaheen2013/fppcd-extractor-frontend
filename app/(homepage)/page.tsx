@@ -1,8 +1,10 @@
 import Link from "next/link";
+import Header from "../components/header";
 
 export default function Home() {
   return (
     <div className="">
+      <Header subtitle="Planning Conditions Extractor"/>
       <div
         className="relative py-24 px-4 sm:px-8 flex flex-col items-center justify-center text-center"
         style={{
