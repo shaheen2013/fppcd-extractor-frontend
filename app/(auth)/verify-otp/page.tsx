@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   useVerifyOtpMutation,
   useResendOtpMutation,
-} from "@/lib/store/services/authApi";
+} from "@/store/services/authApi";
 
 export default function VerifyOTPPage() {
   const router = useRouter();

@@ -21,6 +21,23 @@ export interface ResendOtpResponse {
   success: boolean;
 }
 
+export interface RegisterRequest {
+  full_name: string;
+  email: string;
+  password: string;
+  confirm_password: string;
+}
+
+export interface RegisterResponse {
+  message: string;
+  success: boolean;
+  data?: {
+    id: string;
+    email: string;
+    full_name: string;
+  };
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
@@ -41,7 +58,18 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    register: builder.mutation<RegisterResponse, RegisterRequest>({
+      query: (credentials) => ({
+        url: "/auth/register",
+        method: "POST",
+        body: credentials,
+      }),
+    }),
   }),
 });
 
-export const { useVerifyOtpMutation, useResendOtpMutation } = authApi;
+export const {
+  useVerifyOtpMutation,
+  useResendOtpMutation,
+  useRegisterMutation,
+} = authApi;
