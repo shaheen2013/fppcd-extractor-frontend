@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { JSX } from "react/jsx-runtime";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
@@ -47,9 +48,9 @@ export default function Home() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="lucide lucide-search h-6 w-6 text-blue-600"
           aria-hidden="true"
         >
@@ -70,9 +71,9 @@ export default function Home() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="lucide lucide-shield h-6 w-6 text-blue-600"
           aria-hidden="true"
         >
@@ -92,9 +93,9 @@ export default function Home() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="lucide lucide-trees h-6 w-6 text-blue-600"
           aria-hidden="true"
         >
@@ -117,9 +118,9 @@ export default function Home() {
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
           className="lucide lucide-leaf h-6 w-6 text-blue-600"
           aria-hidden="true"
         >
@@ -147,6 +148,10 @@ export default function Home() {
   const handleGenerate = () => {
     // Logic to generate report based on selected conditions
   };
+
+  const { data: session, status } = useSession();
+
+  console.log("session => ", session);
 
   return (
     <div className="">
@@ -215,9 +220,9 @@ export default function Home() {
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
                 className="lucide lucide-search mr-1 h-5 w-5"
                 aria-hidden="true"
               >
@@ -235,9 +240,9 @@ export default function Home() {
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              stroke-width="2"
-              stroke-linecap="round"
-              stroke-linejoin="round"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
               className="lucide lucide-file-text mr-2 h-5 w-5"
               aria-hidden="true"
             >
