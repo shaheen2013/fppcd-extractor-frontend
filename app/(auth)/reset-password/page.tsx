@@ -96,7 +96,8 @@ function ResetPasswordContent() {
               Reset Password
             </h2>
             <p className="text-center text-md text-gray-500 mb-2">
-              Enter your reset token and new password below
+              Enter your reset token and new password below to reset your
+              password
             </p>
 
             <div>
