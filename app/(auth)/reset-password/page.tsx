@@ -41,7 +41,9 @@ function ResetPasswordContent() {
         confirm_password: confirmPassword,
       }).unwrap();
 
-      if (result.success) {
+      console.log("Reset password result:", result);
+
+      if (result.message) {
         setSuccess(result.message || "Password has been reset successfully");
         // Redirect to login after 2 seconds
         setTimeout(() => {
@@ -49,9 +51,10 @@ function ResetPasswordContent() {
         }, 2000);
       }
     } catch (err) {
-      const error = err as { data?: { message?: string } };
+      const error = err as { data?: { detail?: string } };
+      console.log("Reset password error:", error);
       setError(
-        error?.data?.message || "Failed to reset password. Please try again."
+        error?.data?.detail || "Failed to reset password. Please try again."
       );
     }
   };
