@@ -47,6 +47,17 @@ export interface ForgotPasswordResponse {
   success: boolean;
 }
 
+export interface ResetPasswordRequest {
+  token: string;
+  new_password: string;
+  confirm_password: string;
+}
+
+export interface ResetPasswordResponse {
+  message: string;
+  success: boolean;
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
@@ -84,6 +95,16 @@ export const authApi = createApi({
         body: data,
       }),
     }),
+    resetPassword: builder.mutation<
+      ResetPasswordResponse,
+      ResetPasswordRequest
+    >({
+      query: (data) => ({
+        url: "/auth/reset-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -92,4 +113,5 @@ export const {
   useResendOtpMutation,
   useRegisterMutation,
   useForgotPasswordMutation,
+  useResetPasswordMutation,
 } = authApi;
