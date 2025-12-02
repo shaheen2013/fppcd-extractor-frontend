@@ -38,6 +38,15 @@ export interface RegisterResponse {
   };
 }
 
+export interface ForgotPasswordRequest {
+  email: string;
+}
+
+export interface ForgotPasswordResponse {
+  message: string;
+  success: boolean;
+}
+
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
@@ -65,6 +74,16 @@ export const authApi = createApi({
         body: credentials,
       }),
     }),
+    forgotPassword: builder.mutation<
+      ForgotPasswordResponse,
+      ForgotPasswordRequest
+    >({
+      query: (data) => ({
+        url: "/auth/forgot-password",
+        method: "POST",
+        body: data,
+      }),
+    }),
   }),
 });
 
@@ -72,4 +91,5 @@ export const {
   useVerifyOtpMutation,
   useResendOtpMutation,
   useRegisterMutation,
+  useForgotPasswordMutation,
 } = authApi;
