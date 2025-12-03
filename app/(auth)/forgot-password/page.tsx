@@ -3,28 +3,27 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useForgotPasswordMutation } from "@/store/services/authApi";
+import { toast } from "react-toastify";
 
 export default function ForgotPasswordPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
 
   const [forgotPassword, { isLoading }] = useForgotPasswordMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     try {
       const result = await forgotPassword({ email }).unwrap();
 
       if (result.message) {
-        setSuccess(
+        const successMsg =
           result.message ||
-            "Password reset link has been sent to your email address"
-        );
+          "Password reset link has been sent to your email address";
+        toast.success(successMsg);
         // Redirect to login after 3 seconds
         setTimeout(() => {
           router.push("/login");
@@ -32,9 +31,10 @@ export default function ForgotPasswordPage() {
       }
     } catch (err) {
       const error = err as { data?: { message?: string } };
-      setError(
-        error?.data?.message || "Failed to send reset link. Please try again."
-      );
+      const errorMsg =
+        error?.data?.message || "Failed to send reset link. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -107,18 +107,6 @@ export default function ForgotPasswordPage() {
             >
               {isLoading ? "Sending..." : "Send Reset Link"}
             </button>
-
-            {error && (
-              <div className="text-red-600 text-center text-sm font-semibold">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="text-green-600 text-center text-sm font-semibold">
-                {success}
-              </div>
-            )}
 
             <div className="flex flex-col items-center space-y-2">
               <span className="text-gray-600 text-md">

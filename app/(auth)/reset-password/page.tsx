@@ -3,6 +3,7 @@ import { useState, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useResetPasswordMutation } from "@/store/services/authApi";
+import { toast } from "react-toastify";
 
 function ResetPasswordContent() {
   const router = useRouter();
@@ -13,7 +14,6 @@ function ResetPasswordContent() {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -22,15 +22,18 @@ function ResetPasswordContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    setSuccess("");
 
     if (newPassword !== confirmPassword) {
-      setError("Passwords do not match");
+      const errorMsg = "Passwords do not match";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
     if (!token) {
-      setError("Invalid or missing reset token");
+      const errorMsg = "Invalid or missing reset token";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -44,7 +47,9 @@ function ResetPasswordContent() {
       console.log("Reset password result:", result);
 
       if (result.message) {
-        setSuccess(result.message || "Password has been reset successfully");
+        const successMsg =
+          result.message || "Password has been reset successfully";
+        toast.success(successMsg);
         // Redirect to login after 2 seconds
         setTimeout(() => {
           router.push("/login");
@@ -53,9 +58,10 @@ function ResetPasswordContent() {
     } catch (err) {
       const error = err as { data?: { detail?: string } };
       console.log("Reset password error:", error);
-      setError(
-        error?.data?.detail || "Failed to reset password. Please try again."
-      );
+      const errorMsg =
+        error?.data?.detail || "Failed to reset password. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -102,24 +108,6 @@ function ResetPasswordContent() {
               Enter your reset token and new password below to reset your
               password
             </p>
-
-            <div>
-              <label
-                htmlFor="token"
-                className="block text-sm font-semibold text-gray-700"
-              >
-                Reset Token
-              </label>
-              <input
-                type="text"
-                id="token"
-                value={token}
-                onChange={(e) => setToken(e.target.value)}
-                className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-11"
-                placeholder="Enter your reset token"
-                required
-              />
-            </div>
 
             <div>
               <label
@@ -242,18 +230,6 @@ function ResetPasswordContent() {
             >
               {isLoading ? "Resetting..." : "Reset Password"}
             </button>
-
-            {error && (
-              <div className="text-red-600 text-center text-sm font-semibold">
-                {error}
-              </div>
-            )}
-
-            {success && (
-              <div className="text-green-600 text-center text-sm font-semibold">
-                {success}
-              </div>
-            )}
 
             <div className="flex flex-col items-center space-y-2">
               <span className="text-gray-600 text-md">

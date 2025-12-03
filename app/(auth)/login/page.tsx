@@ -165,11 +165,6 @@ function LoginContent() {
             >
               {isLoading ? "Signing in..." : "Sign In"}
             </button>
-            {error && (
-              <div className="text-red-600 text-center text-sm font-semibold">
-                {error}
-              </div>
-            )}
 
             <div className="flex flex-col items-center  space-y-2">
               <a
