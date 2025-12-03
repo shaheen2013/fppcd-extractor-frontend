@@ -19,14 +19,14 @@ function LoginContent() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-    
+
     try {
       const res = await signIn("credentials", {
         redirect: false,
         username: email,
         password,
       });
-      
+
       if (res?.error) {
         setError("Invalid credentials");
         toast.error("Invalid credentials");

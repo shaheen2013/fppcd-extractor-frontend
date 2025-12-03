@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegisterMutation } from "@/store/services/authApi";
+import { toast } from "react-toastify";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -23,7 +24,9 @@ export default function RegisterPage() {
     setError("");
 
     if (password !== confirmPassword) {
-      setError("Passwords do not match");
+      const errorMsg = "Passwords do not match";
+      setError(errorMsg);
+      toast.error(errorMsg);
       return;
     }
 
@@ -35,15 +38,20 @@ export default function RegisterPage() {
         confirm_password: confirmPassword,
       }).unwrap();
 
-      if (result.success) {
-        // Redirect to verify OTP page with email
+      console.log("registration result => ", result);
+
+      toast.success("Registration successful! Please verify your email.");
+      // Redirect to verify OTP page with email after showing toast
+      setTimeout(() => {
         router.push(`/verify-otp?email=${encodeURIComponent(email)}`);
-      }
+      }, 1000);
     } catch (err) {
-      const error = err as { data?: { message?: string } };
-      setError(
-        error?.data?.message || "Registration failed. Please try again."
-      );
+      const error = err as { data?: { detail?: string } };
+      console.log("registration error => ", error);
+      const errorMsg =
+        error?.data?.detail || "Registration failed. Please try again.";
+      setError(errorMsg);
+      toast.error(errorMsg);
     }
   };
 
@@ -245,12 +253,6 @@ export default function RegisterPage() {
             >
               {isLoading ? "Creating Account..." : "Sign Up"}
             </button>
-
-            {error && (
-              <div className="text-red-600 text-center text-sm font-semibold">
-                {error}
-              </div>
-            )}
 
             <div className="flex flex-col items-center space-y-2">
               <span className="text-gray-600 text-md">
