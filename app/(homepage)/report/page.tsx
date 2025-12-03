@@ -10,18 +10,23 @@ import Link from "next/link";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import { useDebounceValue } from "usehooks-ts";
 
 export default function PlanningApplicationsReport() {
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [debouncedSearch] = useDebounceValue(searchQuery, 500);
   const pageSize = 10;
 
   const {
     data: dataApplications,
     isLoading: loadingApplications,
+    isFetching: fetchingApplications,
     error: errorGettingApplications,
   } = useGetApplicationsQuery({
     page: currentPage,
     page_size: pageSize,
+    borough: debouncedSearch || undefined,
   });
 
   const [updateApplicationStatus, { isLoading: isUpdating }] =
@@ -35,11 +40,18 @@ export default function PlanningApplicationsReport() {
     setCurrentPage(selectedItem.selected + 1); // react-paginate uses 0-indexed pages
   };
 
-  const handleMark = async ({ applicationRef, contacted }: any) => {
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchQuery(e.target.value);
+    setCurrentPage(1); // Reset to first page when searching
+  };
+
+  const handleMark = async (app: any) => {
+    console.log("handleMark called with => ", app);
+
     try {
       const result = await updateApplicationStatus({
-        application_ref: applicationRef,
-        contacted: contacted,
+        application_ref: app["Application_Ref"],
+        contacted: !app.Contacted,
         actions: true,
       }).unwrap();
 
@@ -154,7 +166,8 @@ export default function PlanningApplicationsReport() {
               </h1>
 
               <p className="font-normal text-gray-500">
-                Found 3 applications matching your selected conditions
+                Found {dataApplications?.total} applications matching your
+                selected conditions
               </p>
             </div>
             <div className="flex gap-2">
@@ -243,6 +256,8 @@ export default function PlanningApplicationsReport() {
               <input
                 type="text"
                 placeholder="Search applications..."
+                value={searchQuery}
+                onChange={handleSearchChange}
                 className="w-full border rounded-lg p-2 pl-10 input-bootstrap placeholder:font-light placeholder:text-gray-600"
               />
               <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -262,7 +277,7 @@ export default function PlanningApplicationsReport() {
             </div>
 
             <div className="overflow-x-auto">
-              {loadingApplications ? (
+              {fetchingApplications ? (
                 <table className="w-full text-left border-collapse">
                   <thead className="bg-[#F7F9FB] text-sm">
                     <tr className="border-b text-gray-900">
@@ -316,7 +331,7 @@ export default function PlanningApplicationsReport() {
                   </thead>
                   <tbody>
                     {dataApplications?.data?.map((app: any, idx: any) => {
-                      console.log("application => ", app);
+                      // console.log("application => ", app);
                       return (
                         <tr key={idx} className="border-b hover:bg-gray-50">
                           <td className="p-3 font-medium text-sm min-w-[200px]">
@@ -368,12 +383,7 @@ export default function PlanningApplicationsReport() {
                           <td className="p-3">
                             {app.Contacted ? (
                               <Button
-                                onClick={() =>
-                                  handleMark({
-                                    applicationRef: app["Application_Ref"],
-                                    contacted: !app.Contacted,
-                                  })
-                                }
+                                onClick={() => handleMark(app)}
                                 disabled={isUpdating}
                                 className="text-red-600 bg-transparent border border-red-400
                             hover:text-black hover:bg-red-50 disabled:opacity-50"
@@ -382,12 +392,7 @@ export default function PlanningApplicationsReport() {
                               </Button>
                             ) : (
                               <Button
-                                onClick={() =>
-                                  handleMark({
-                                    applicationRef: app["Application_Ref"],
-                                    contacted: !app.Contacted,
-                                  })
-                                }
+                                onClick={() => handleMark(app)}
                                 disabled={isUpdating}
                                 className="text-green-700 bg-transparent border border-green-500
                             hover:text-black hover:bg-green-50 disabled:opacity-50"

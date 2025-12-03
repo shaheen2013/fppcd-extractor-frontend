@@ -19,6 +19,7 @@ export interface GetApplicationsParams {
   start_date?: string;
   end_date?: string;
   sort?: string;
+  search?: string;
 }
 
 export interface UpdateApplicationStatusRequest {
@@ -54,6 +55,7 @@ export const scrapperApi = createApi({
             queryParams.append("start_date", params.start_date);
           if (params.end_date) queryParams.append("end_date", params.end_date);
           if (params.sort) queryParams.append("sort", params.sort);
+          if (params.borough) queryParams.append("borough", params.borough);
         }
 
         return {
