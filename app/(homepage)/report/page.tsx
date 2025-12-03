@@ -2,38 +2,18 @@
 
 import Header from "@/app/components/header";
 import { Button } from "@/components/ui/button";
-import { useGetApplicationsQuery } from "@/store/services/scrapperApi";
+import {
+  useGetApplicationsQuery,
+  useUpdateApplicationStatusMutation,
+} from "@/store/services/scrapperApi";
 import Link from "next/link";
 import { useState } from "react";
 import ReactPaginate from "react-paginate";
+import { toast } from "react-toastify";
 
 export default function PlanningApplicationsReport() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 10;
-
-  const applications = [
-    {
-      name: "Riverside Development",
-      address: "123 Thames Street, London SW1 4AA",
-      conditions: ["Heritage Assessment Required", "Archaeological Survey"],
-      status: "Approved",
-      contacted: "No",
-    },
-    {
-      name: "Oak Tree Housing",
-      address: "45 Conservation Road, Bath BA2 3RL",
-      conditions: ["Tree Preservation Order", "Landscaping Plan"],
-      status: "Approved",
-      contacted: "Yes",
-    },
-    {
-      name: "Historic Mill Conversion",
-      address: "78 Mill Lane, York YO1 9AB",
-      conditions: ["Listed Building Consent", "Ecology Survey"],
-      status: "Rejected",
-      contacted: "No",
-    },
-  ];
 
   const {
     data: dataApplications,
@@ -44,6 +24,9 @@ export default function PlanningApplicationsReport() {
     page_size: pageSize,
   });
 
+  const [updateApplicationStatus, { isLoading: isUpdating }] =
+    useUpdateApplicationStatusMutation();
+
   const totalPages = dataApplications?.total
     ? Math.ceil(dataApplications.total / pageSize)
     : 0;
@@ -51,6 +34,46 @@ export default function PlanningApplicationsReport() {
   const handlePageChange = (selectedItem: { selected: number }) => {
     setCurrentPage(selectedItem.selected + 1); // react-paginate uses 0-indexed pages
   };
+
+  const handleMark = async ({ applicationRef, contacted }: any) => {
+    try {
+      const result = await updateApplicationStatus({
+        application_ref: applicationRef,
+        contacted: contacted,
+        actions: true,
+      }).unwrap();
+
+      console.log("update result => ", result);
+
+      if (result.message) {
+        toast.success(result.message);
+      }
+    } catch (err) {
+      const error = err as { data?: { message?: string } };
+      toast.error(error?.data?.message || "Failed to update status");
+    }
+  };
+
+  if (errorGettingApplications) {
+    return (
+      <>
+        <Header subtitle="Report Results" />
+        <div className="p-9 bg-[F8FAFC] min-h-screen">
+          <div className="container mx-auto">
+            <div className="bg-white shadow rounded-xl p-6">
+              <h2 className="text-2xl font-semibold text-red-600">
+                Error Loading Applications
+              </h2>
+              <p className="mt-4 text-gray-600">
+                There was an error fetching the planning applications. Please
+                try again later.
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -296,10 +319,10 @@ export default function PlanningApplicationsReport() {
                       console.log("application => ", app);
                       return (
                         <tr key={idx} className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium text-sm">
+                          <td className="p-3 font-medium text-sm min-w-[200px]">
                             {app["Application Name"] || "N/A"}
                           </td>
-                          <td className="p-3 font-normal text-sm">
+                          <td className="p-3 font-normal text-sm min-w-[250px]">
                             {app["Address"] || "N/A"}
                           </td>
                           <td className="p-3 flex flex-wrap gap-2">
@@ -313,7 +336,7 @@ export default function PlanningApplicationsReport() {
                                 </span>
                               ))
                             ) : (
-                              <span className="text-gray-500 text-xs">
+                              <span className="text-gray-500 text-xs mt-2">
                                 No conditions
                               </span>
                             )}
@@ -343,21 +366,33 @@ export default function PlanningApplicationsReport() {
                           </td>
 
                           <td className="p-3">
-                            {app.contacted === "No" ? (
+                            {app.Status == "Approved" ? (
                               <Button
-                                className="text-green-700 bg-transparent border border-green-500
-                            hover:text-black hover:bg-green-50
-                        "
+                                onClick={() =>
+                                  handleMark({
+                                    applicationRef: app["Application_Ref"],
+                                    contacted: !app.Contacted,
+                                  })
+                                }
+                                disabled={isUpdating}
+                                className="text-red-600 bg-transparent border border-red-400
+                            hover:text-black hover:bg-red-50 disabled:opacity-50"
                               >
-                                Mark as Contacted
+                                Mark as Not Contacted
                               </Button>
                             ) : (
                               <Button
-                                className="text-red-600 bg-transparent border border-red-400
-                            hover:text-black hover:bg-red-50
-                        "
+                                onClick={() =>
+                                  handleMark({
+                                    applicationRef: app["Application_Ref"],
+                                    contacted: !app.Contacted,
+                                  })
+                                }
+                                disabled={isUpdating}
+                                className="text-green-700 bg-transparent border border-green-500
+                            hover:text-black hover:bg-green-50 disabled:opacity-50"
                               >
-                                Mark as Not Contacted
+                                Mark as Contacted
                               </Button>
                             )}
                           </td>

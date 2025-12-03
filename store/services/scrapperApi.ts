@@ -21,6 +21,17 @@ export interface GetApplicationsParams {
   sort?: string;
 }
 
+export interface UpdateApplicationStatusRequest {
+  application_ref: string;
+  contacted: boolean;
+  actions: boolean;
+}
+
+export interface UpdateApplicationStatusResponse {
+  success: boolean;
+  message?: string;
+}
+
 export const scrapperApi = createApi({
   reducerPath: "scrapperApi",
   baseQuery: fetchBaseQuery({
@@ -54,7 +65,19 @@ export const scrapperApi = createApi({
       },
       providesTags: ["Applications"],
     }),
+    updateApplicationStatus: builder.mutation<
+      UpdateApplicationStatusResponse,
+      UpdateApplicationStatusRequest
+    >({
+      query: (data) => ({
+        url: "/api/v1/application-status",
+        method: "PATCH",
+        body: data,
+      }),
+      invalidatesTags: ["Applications"],
+    }),
   }),
 });
 
-export const { useGetApplicationsQuery } = scrapperApi;
+export const { useGetApplicationsQuery, useUpdateApplicationStatusMutation } =
+  scrapperApi;
