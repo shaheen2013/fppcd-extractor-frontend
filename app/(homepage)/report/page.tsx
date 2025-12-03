@@ -2,9 +2,15 @@
 
 import Header from "@/app/components/header";
 import { Button } from "@/components/ui/button";
+import { useGetApplicationsQuery } from "@/store/services/scrapperApi";
 import Link from "next/link";
+import { useState } from "react";
+import ReactPaginate from "react-paginate";
 
 export default function PlanningApplicationsReport() {
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 10;
+
   const applications = [
     {
       name: "Riverside Development",
@@ -28,6 +34,27 @@ export default function PlanningApplicationsReport() {
       contacted: "No",
     },
   ];
+
+  const {
+    data: dataApplications,
+    isLoading: loadingApplications,
+    error: errorGettingApplications,
+  } = useGetApplicationsQuery({
+    page: currentPage,
+    page_size: pageSize,
+  });
+
+  const totalPages = dataApplications?.total
+    ? Math.ceil(dataApplications.total / pageSize)
+    : 0;
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected + 1); // react-paginate uses 0-indexed pages
+  };
+
+  if (loadingApplications) {
+    return <div>Loading applications...</div>;
+  }
 
   return (
     <>
@@ -228,65 +255,111 @@ export default function PlanningApplicationsReport() {
                   </tr>
                 </thead>
                 <tbody>
-                  {applications.map((app, idx) => (
-                    <tr key={idx} className="border-b hover:bg-gray-50">
-                      <td className="p-3 font-medium text-sm">{app.name}</td>
-                      <td className="p-3 font-normal text-sm">{app.address}</td>
-                      <td className="p-3 flex flex-wrap gap-2">
-                        {app.conditions.map((c, i) => (
+                  {dataApplications?.data?.map((app: any, idx: any) => {
+                    console.log("application => ", app);
+                    return (
+                      <tr key={idx} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium text-sm">
+                          {app["Application Name"] || "N/A"}
+                        </td>
+                        <td className="p-3 font-normal text-sm">
+                          {app["Address"] || "N/A"}
+                        </td>
+                        <td className="p-3 flex flex-wrap gap-2">
+                          {Array.isArray(app["Conditions"]) ? (
+                            app["Conditions"].map((c: any, i: any) => (
+                              <span
+                                key={i}
+                                className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
+                              >
+                                {c}
+                              </span>
+                            ))
+                          ) : (
+                            <span className="text-gray-500 text-xs">
+                              No conditions
+                            </span>
+                          )}
+                        </td>
+                        <td className="p-3">
                           <span
-                            key={i}
-                            className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
+                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                              app.Status === "Approved"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
                           >
-                            {c}
+                            {app.Status}
                           </span>
-                        ))}
-                      </td>
-                      <td className="p-3">
-                        <span
-                          className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                            app.status === "Approved"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-red-100 text-red-800"
-                          }`}
-                        >
-                          {app.status}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        <span
-                          className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                            app.contacted === "Yes"
-                              ? "bg-green-100 text-green-800"
-                              : "bg-gray-200 text-gray-600"
-                          }`}
-                        >
-                          {app.contacted}
-                        </span>
-                      </td>
-                      <td className="p-3">
-                        {app.contacted === "No" ? (
-                          <Button
-                            className="text-green-700 bg-transparent border border-green-500
+                        </td>
+
+                        <td className="p-3">
+                          <span
+                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                              app.Contacted
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-200 text-gray-600"
+                            }`}
+                          >
+                            {app.Contacted ? "Yes" : "No"}
+                          </span>
+                        </td>
+
+                        <td className="p-3">
+                          {app.contacted === "No" ? (
+                            <Button
+                              className="text-green-700 bg-transparent border border-green-500
                             hover:text-black hover:bg-green-50
                         "
-                          >
-                            Mark as Contacted
-                          </Button>
-                        ) : (
-                          <Button
-                            className="text-red-600 bg-transparent border border-red-400
+                            >
+                              Mark as Contacted
+                            </Button>
+                          ) : (
+                            <Button
+                              className="text-red-600 bg-transparent border border-red-400
                             hover:text-black hover:bg-red-50
                         "
-                          >
-                            Mark as Not Contacted
-                          </Button>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
+                            >
+                              Mark as Not Contacted
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    );
+                  })}
                 </tbody>
               </table>
+            </div>
+
+            {/* Pagination */}
+            <div className="mt-6 flex justify-center">
+              <ReactPaginate
+                previousLabel={"← Previous"}
+                nextLabel={"Next →"}
+                pageCount={totalPages}
+                onPageChange={handlePageChange}
+                forcePage={currentPage - 1}
+                containerClassName={"flex items-center gap-2"}
+                pageClassName={"border border-gray-300 rounded-md"}
+                pageLinkClassName={"px-3 py-2 block hover:bg-blue-50"}
+                activeClassName={"bg-blue-600 text-white border-blue-600"}
+                activeLinkClassName={"text-white"}
+                previousClassName={
+                  "border border-gray-300 rounded-md cursor-pointer select-none"
+                }
+                previousLinkClassName={
+                  "px-3 py-2 block hover:bg-gray-50 transition-colors"
+                }
+                nextClassName={
+                  "border border-gray-300 rounded-md cursor-pointer select-none"
+                }
+                nextLinkClassName={
+                  "px-3 py-2 block hover:bg-gray-50 transition-colors"
+                }
+                disabledClassName={"opacity-50 cursor-not-allowed"}
+                breakLabel={"..."}
+                breakClassName={"px-3 py-2"}
+              />
             </div>
           </div>
         </div>
