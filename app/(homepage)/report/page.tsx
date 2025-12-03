@@ -341,7 +341,7 @@ export default function PlanningApplicationsReport() {
                 forcePage={currentPage - 1}
                 containerClassName={"flex items-center gap-2"}
                 pageClassName={"border border-gray-300 rounded-md"}
-                pageLinkClassName={"px-3 py-2 block hover:bg-blue-50"}
+                pageLinkClassName={"px-3 py-2 block cursor-pointer"}
                 activeClassName={"bg-blue-600 text-white border-blue-600"}
                 activeLinkClassName={"text-white"}
                 previousClassName={
