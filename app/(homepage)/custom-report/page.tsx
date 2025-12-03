@@ -8,34 +8,27 @@ import {
 } from "@/store/services/scrapperApi";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Suspense, useState } from "react";
+import { Suspense } from "react";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
-import { useDebounceValue } from "usehooks-ts";
 
-function PlanningApplicationsReportContent() {
+function CustomReportContent() {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
   const currentPage = Number(searchParams.get("page")) || 1;
-  const conditions = searchParams.get("conditions") || "";
-
-  const [searchQuery, setSearchQuery] = useState("");
-  const [debouncedSearch] = useDebounceValue(searchQuery, 500);
   const pageSize = 10;
-
-  console.log("conditions => ", conditions);
 
   const {
     data: dataApplications,
-    isLoading: loadingApplications,
     isFetching: fetchingApplications,
     error: errorGettingApplications,
   } = useGetApplicationsQuery({
     page: currentPage,
     page_size: pageSize,
-    borough: debouncedSearch || undefined,
+    // Pass conditions if your API supports it; otherwise remove
+    // conditions: conditions || undefined,
   });
 
   const [updateApplicationStatus, { isLoading: isUpdating }] =
@@ -51,21 +44,13 @@ function PlanningApplicationsReportContent() {
     router.push(`${pathname}?${params.toString()}`);
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchQuery(e.target.value);
-  };
-
   const handleMark = async (app: any) => {
-    console.log("handleMark called with => ", app);
-
     try {
       const result = await updateApplicationStatus({
         application_ref: app["Application_Ref"],
         contacted: !app.Contacted,
         actions: true,
       }).unwrap();
-
-      console.log("update result => ", result);
 
       if (result.message) {
         toast.success(result.message);
@@ -79,7 +64,7 @@ function PlanningApplicationsReportContent() {
   if (errorGettingApplications) {
     return (
       <>
-        <Header subtitle="Report Results" />
+        <Header subtitle="Custom Report" />
         <div className="p-9 bg-[F8FAFC] min-h-screen">
           <div className="container mx-auto">
             <div className="bg-white shadow rounded-xl p-6">
@@ -99,7 +84,7 @@ function PlanningApplicationsReportContent() {
 
   return (
     <>
-      <Header subtitle="Report Results" />
+      <Header subtitle="Custom Report" />
       <div className="p-9 bg-[F8FAFC] min-h-screen">
         <div className="container mx-auto mb-9">
           <div className="flex gap-4">
@@ -163,7 +148,7 @@ function PlanningApplicationsReportContent() {
                 <path d="M16 13H8"></path>
                 <path d="M16 17H8"></path>
               </svg>
-              <Link href="/">Custom Report</Link>
+              <Link href="/custom-report">Custom Report</Link>
             </Button>
           </div>
         </div>
@@ -172,11 +157,11 @@ function PlanningApplicationsReportContent() {
           <div className="flex justify-between items-center mb-6 px-6 py-7 bg-blue-50">
             <div>
               <h1 className="text-2xl font-normal text-gray-700 mb-1">
-                Planning Applications Report
+                Custom Report
               </h1>
 
               <p className="font-normal text-gray-500">
-                Found {dataApplications?.total} applications matching your
+                Found {dataApplications?.total ?? 0} applications matching your
                 selected conditions
               </p>
             </div>
@@ -185,7 +170,6 @@ function PlanningApplicationsReportContent() {
                 variant="outline"
                 className="font-semibold hover:bg-transparent"
                 onClick={() => {
-                  // print the page
                   print();
                 }}
               >
@@ -262,30 +246,6 @@ function PlanningApplicationsReportContent() {
           </div>
 
           <div className="px-6 py-6">
-            <div className="relative mb-4">
-              <input
-                type="text"
-                placeholder="Search applications..."
-                value={searchQuery}
-                onChange={handleSearchChange}
-                className="w-full border rounded-lg p-2 pl-10 input-bootstrap placeholder:font-light placeholder:text-gray-600"
-              />
-              <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <line x1="21" y1="21" x2="16.65" y2="16.65" />
-                </svg>
-              </span>
-            </div>
-
             <div className="overflow-x-auto">
               {fetchingApplications ? (
                 <table className="w-full text-left border-collapse">
@@ -340,87 +300,81 @@ function PlanningApplicationsReportContent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataApplications?.data?.map((app: any, idx: any) => {
-                      // console.log("application => ", app);
-                      return (
-                        <tr key={idx} className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium text-sm min-w-[200px]">
-                            {app["Application Name"] || "N/A"}
-                          </td>
-                          <td className="p-3 font-normal text-sm min-w-[250px]">
-                            {app["Address"] || "N/A"}
-                          </td>
-                          <td className="p-3 flex flex-wrap gap-2">
-                            {Array.isArray(app["Conditions"]) ? (
-                              app["Conditions"].map((c: any, i: any) => (
-                                <span
-                                  key={i}
-                                  className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
-                                >
-                                  {c}
-                                </span>
-                              ))
-                            ) : (
-                              <span className="text-gray-500 text-xs mt-2">
-                                No conditions
+                    {dataApplications?.data?.map((app: any, idx: any) => (
+                      <tr key={idx} className="border-b hover:bg-gray-50">
+                        <td className="p-3 font-medium text-sm min-w-[200px]">
+                          {app["Application Name"] || "N/A"}
+                        </td>
+                        <td className="p-3 font-normal text-sm min-w-[250px]">
+                          {app["Address"] || "N/A"}
+                        </td>
+                        <td className="p-3 flex flex-wrap gap-2">
+                          {Array.isArray(app["Conditions"]) ? (
+                            app["Conditions"].map((c: any, i: any) => (
+                              <span
+                                key={i}
+                                className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
+                              >
+                                {c}
                               </span>
-                            )}
-                          </td>
-                          <td className="p-3">
-                            <span
-                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                                app.Status === "Approved"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {app.Status}
+                            ))
+                          ) : (
+                            <span className="text-gray-500 text-xs mt-2">
+                              No conditions
                             </span>
-                          </td>
+                          )}
+                        </td>
+                        <td className="p-3">
+                          <span
+                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                              app.Status === "Approved"
+                                ? "bg-green-100 text-green-800"
+                                : "bg-red-100 text-red-800"
+                            }`}
+                          >
+                            {app.Status}
+                          </span>
+                        </td>
 
-                          <td className="p-3">
-                            <span
-                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                                app.Contacted
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-gray-200 text-gray-600"
-                              }`}
+                        <td className="p-3">
+                          <span
+                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                              app.Contacted
+                                ? "bg-green-100 text-green-800"
+                                : "bg-gray-200 text-gray-600"
+                            }`}
+                          >
+                            {app.Contacted ? "Yes" : "No"}
+                          </span>
+                        </td>
+
+                        <td className="p-3">
+                          {app.Contacted ? (
+                            <Button
+                              onClick={() => handleMark(app)}
+                              disabled={isUpdating}
+                              className="text-red-600 bg-transparent border border-red-400
+                          hover:text-black hover:bg-red-50 disabled:opacity-50"
                             >
-                              {app.Contacted ? "Yes" : "No"}
-                            </span>
-                          </td>
-
-                          <td className="p-3">
-                            {app.Contacted ? (
-                              <Button
-                                onClick={() => handleMark(app)}
-                                disabled={isUpdating}
-                                className="text-red-600 bg-transparent border border-red-400
-                            hover:text-black hover:bg-red-50 disabled:opacity-50"
-                              >
-                                Mark as Not Contacted
-                              </Button>
-                            ) : (
-                              <Button
-                                onClick={() => handleMark(app)}
-                                disabled={isUpdating}
-                                className="text-green-700 bg-transparent border border-green-500
-                            hover:text-black hover:bg-green-50 disabled:opacity-50"
-                              >
-                                Mark as Contacted
-                              </Button>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                              Mark as Not Contacted
+                            </Button>
+                          ) : (
+                            <Button
+                              onClick={() => handleMark(app)}
+                              disabled={isUpdating}
+                              className="text-green-700 bg-transparent border border-green-500
+                          hover:text-black hover:bg-green-50 disabled:opacity-50"
+                            >
+                              Mark as Contacted
+                            </Button>
+                          )}
+                        </td>
+                      </tr>
+                    ))}
 
                     {dataApplications?.data?.length === 0 && (
                       <tr>
-                        <td
-                          colSpan={6}
-                          className="p-6 text-center text-gray-600"
-                        >
+                        <td colSpan={6} className="p-6 text-center text-gray-600">
                           No applications found.
                         </td>
                       </tr>
@@ -467,10 +421,10 @@ function PlanningApplicationsReportContent() {
   );
 }
 
-export default function PlanningApplicationsReport() {
+export default function CustomReportPage() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
-      <PlanningApplicationsReportContent />
+      <CustomReportContent />
     </Suspense>
   );
 }
