@@ -404,6 +404,17 @@ export default function PlanningApplicationsReport() {
                         </tr>
                       );
                     })}
+
+                    {dataApplications?.data?.length === 0 && (
+                      <tr>
+                        <td
+                          colSpan={6}
+                          className="p-6 text-center text-gray-600"
+                        >
+                          No applications found.
+                        </td>
+                      </tr>
+                    )}
                   </tbody>
                 </table>
               )}
