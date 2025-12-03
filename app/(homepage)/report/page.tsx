@@ -7,13 +7,18 @@ import {
   useUpdateApplicationStatusMutation,
 } from "@/store/services/scrapperApi";
 import Link from "next/link";
-import { useState } from "react";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+import { Suspense, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
 import { useDebounceValue } from "usehooks-ts";
 
-export default function PlanningApplicationsReport() {
-  const [currentPage, setCurrentPage] = useState(1);
+function PlanningApplicationsReportContent() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const currentPage = Number(searchParams.get("page")) || 1;
   const [searchQuery, setSearchQuery] = useState("");
   const [debouncedSearch] = useDebounceValue(searchQuery, 500);
   const pageSize = 10;
@@ -37,12 +42,13 @@ export default function PlanningApplicationsReport() {
     : 0;
 
   const handlePageChange = (selectedItem: { selected: number }) => {
-    setCurrentPage(selectedItem.selected + 1); // react-paginate uses 0-indexed pages
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("page", (selectedItem.selected + 1).toString());
+    router.push(`${pathname}?${params.toString()}`);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
-    setCurrentPage(1); // Reset to first page when searching
   };
 
   const handleMark = async (app: any) => {
@@ -454,5 +460,13 @@ export default function PlanningApplicationsReport() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function PlanningApplicationsReport() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PlanningApplicationsReportContent />
+    </Suspense>
   );
 }
