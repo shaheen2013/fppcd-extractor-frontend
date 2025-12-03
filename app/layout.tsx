@@ -1,8 +1,10 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "@/app/globals.css";
+import "react-toastify/dist/ReactToastify.css";
 import AuthProvider from "./components/AuthProvider";
 import StoreProvider from "./components/StoreProvider";
+import { ToastContainer } from "react-toastify";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -24,6 +26,7 @@ export default function RootLayout({
         <StoreProvider>
           <AuthProvider>{children}</AuthProvider>
         </StoreProvider>
+        <ToastContainer position="top-right" autoClose={3000} />
       </body>
     </html>
   );

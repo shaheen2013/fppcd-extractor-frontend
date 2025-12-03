@@ -3,12 +3,14 @@ import { useState, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
+import { toast } from "react-toastify";
 
 function LoginContent() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const searchParams = useSearchParams();
   const callbackUrl = searchParams.get("callbackUrl");
@@ -16,15 +18,26 @@ function LoginContent() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
-    const res = await signIn("credentials", {
-      redirect: false,
-      username: email,
-      password,
-    });
-    if (res?.error) {
-      setError("Invalid credentials");
-    } else {
-      window.location.href = callbackUrl || "/";
+    setIsLoading(true);
+    
+    try {
+      const res = await signIn("credentials", {
+        redirect: false,
+        username: email,
+        password,
+      });
+      
+      if (res?.error) {
+        setError("Invalid credentials");
+        toast.error("Invalid credentials");
+      } else {
+        toast.success("Login successful!");
+        setTimeout(() => {
+          window.location.href = callbackUrl || "/";
+        }, 1000);
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
   return (
@@ -147,9 +160,10 @@ function LoginContent() {
 
             <button
               type="submit"
-              className="w-full bg-blue-600 flex justify-center items-center text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm"
+              disabled={isLoading}
+              className="w-full bg-blue-600 flex justify-center items-center text-white py-2 rounded-md hover:bg-blue-700 transition-colors font-semibold h-11 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              Sign In
+              {isLoading ? "Signing in..." : "Sign In"}
             </button>
             {error && (
               <div className="text-red-600 text-center text-sm font-semibold">
