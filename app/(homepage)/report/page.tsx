@@ -52,10 +52,6 @@ export default function PlanningApplicationsReport() {
     setCurrentPage(selectedItem.selected + 1); // react-paginate uses 0-indexed pages
   };
 
-  if (loadingApplications) {
-    return <div>Loading applications...</div>;
-  }
-
   return (
     <>
       <Header subtitle="Report Results" />
@@ -243,92 +239,134 @@ export default function PlanningApplicationsReport() {
             </div>
 
             <div className="overflow-x-auto">
-              <table className="w-full text-left border-collapse">
-                <thead className="bg-[#F7F9FB] text-sm">
-                  <tr className="border-b text-gray-900">
-                    <th className="p-2 font-medium">Application Name</th>
-                    <th className="p-2 font-medium">Address</th>
-                    <th className="p-2 font-medium">Conditions</th>
-                    <th className="p-2 font-medium">Status</th>
-                    <th className="p-2 font-medium">Contacted</th>
-                    <th className="p-2 font-medium">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {dataApplications?.data?.map((app: any, idx: any) => {
-                    console.log("application => ", app);
-                    return (
-                      <tr key={idx} className="border-b hover:bg-gray-50">
-                        <td className="p-3 font-medium text-sm">
-                          {app["Application Name"] || "N/A"}
-                        </td>
-                        <td className="p-3 font-normal text-sm">
-                          {app["Address"] || "N/A"}
-                        </td>
-                        <td className="p-3 flex flex-wrap gap-2">
-                          {Array.isArray(app["Conditions"]) ? (
-                            app["Conditions"].map((c: any, i: any) => (
-                              <span
-                                key={i}
-                                className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
-                              >
-                                {c}
-                              </span>
-                            ))
-                          ) : (
-                            <span className="text-gray-500 text-xs">
-                              No conditions
-                            </span>
-                          )}
+              {loadingApplications ? (
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-[#F7F9FB] text-sm">
+                    <tr className="border-b text-gray-900">
+                      <th className="p-2 font-medium">Application Name</th>
+                      <th className="p-2 font-medium">Address</th>
+                      <th className="p-2 font-medium">Conditions</th>
+                      <th className="p-2 font-medium">Status</th>
+                      <th className="p-2 font-medium">Contacted</th>
+                      <th className="p-2 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...Array(5)].map((_, idx) => (
+                      <tr key={idx} className="border-b">
+                        <td className="p-3">
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
                         </td>
                         <td className="p-3">
-                          <span
-                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                              app.Status === "Approved"
-                                ? "bg-green-100 text-green-800"
-                                : "bg-red-100 text-red-800"
-                            }`}
-                          >
-                            {app.Status}
-                          </span>
+                          <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
                         </td>
-
                         <td className="p-3">
-                          <span
-                            className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                              app.Contacted
-                                ? "bg-green-100 text-green-800"
-                                : "bg-gray-200 text-gray-600"
-                            }`}
-                          >
-                            {app.Contacted ? "Yes" : "No"}
-                          </span>
+                          <div className="flex gap-2">
+                            <div className="h-6 w-24 bg-gray-200 rounded animate-pulse"></div>
+                            <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
+                          </div>
                         </td>
-
                         <td className="p-3">
-                          {app.contacted === "No" ? (
-                            <Button
-                              className="text-green-700 bg-transparent border border-green-500
-                            hover:text-black hover:bg-green-50
-                        "
-                            >
-                              Mark as Contacted
-                            </Button>
-                          ) : (
-                            <Button
-                              className="text-red-600 bg-transparent border border-red-400
-                            hover:text-black hover:bg-red-50
-                        "
-                            >
-                              Mark as Not Contacted
-                            </Button>
-                          )}
+                          <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
+                        </td>
+                        <td className="p-3">
+                          <div className="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
+                        </td>
+                        <td className="p-3">
+                          <div className="h-9 w-36 bg-gray-200 rounded animate-pulse"></div>
                         </td>
                       </tr>
-                    );
-                  })}
-                </tbody>
-              </table>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <table className="w-full text-left border-collapse">
+                  <thead className="bg-[#F7F9FB] text-sm">
+                    <tr className="border-b text-gray-900">
+                      <th className="p-2 font-medium">Application Name</th>
+                      <th className="p-2 font-medium">Address</th>
+                      <th className="p-2 font-medium">Conditions</th>
+                      <th className="p-2 font-medium">Status</th>
+                      <th className="p-2 font-medium">Contacted</th>
+                      <th className="p-2 font-medium">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {dataApplications?.data?.map((app: any, idx: any) => {
+                      console.log("application => ", app);
+                      return (
+                        <tr key={idx} className="border-b hover:bg-gray-50">
+                          <td className="p-3 font-medium text-sm">
+                            {app["Application Name"] || "N/A"}
+                          </td>
+                          <td className="p-3 font-normal text-sm">
+                            {app["Address"] || "N/A"}
+                          </td>
+                          <td className="p-3 flex flex-wrap gap-2">
+                            {Array.isArray(app["Conditions"]) ? (
+                              app["Conditions"].map((c: any, i: any) => (
+                                <span
+                                  key={i}
+                                  className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
+                                >
+                                  {c}
+                                </span>
+                              ))
+                            ) : (
+                              <span className="text-gray-500 text-xs">
+                                No conditions
+                              </span>
+                            )}
+                          </td>
+                          <td className="p-3">
+                            <span
+                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                                app.Status === "Approved"
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-red-100 text-red-800"
+                              }`}
+                            >
+                              {app.Status}
+                            </span>
+                          </td>
+
+                          <td className="p-3">
+                            <span
+                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                                app.Contacted
+                                  ? "bg-green-100 text-green-800"
+                                  : "bg-gray-200 text-gray-600"
+                              }`}
+                            >
+                              {app.Contacted ? "Yes" : "No"}
+                            </span>
+                          </td>
+
+                          <td className="p-3">
+                            {app.contacted === "No" ? (
+                              <Button
+                                className="text-green-700 bg-transparent border border-green-500
+                            hover:text-black hover:bg-green-50
+                        "
+                              >
+                                Mark as Contacted
+                              </Button>
+                            ) : (
+                              <Button
+                                className="text-red-600 bg-transparent border border-red-400
+                            hover:text-black hover:bg-red-50
+                        "
+                              >
+                                Mark as Not Contacted
+                              </Button>
+                            )}
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              )}
             </div>
 
             {/* Pagination */}
