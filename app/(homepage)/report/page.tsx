@@ -366,7 +366,7 @@ export default function PlanningApplicationsReport() {
                           </td>
 
                           <td className="p-3">
-                            {app.Status == "Approved" ? (
+                            {app.Contacted ? (
                               <Button
                                 onClick={() =>
                                   handleMark({
