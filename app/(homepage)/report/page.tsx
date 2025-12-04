@@ -163,7 +163,7 @@ function PlanningApplicationsReportContent() {
                 <path d="M16 13H8"></path>
                 <path d="M16 17H8"></path>
               </svg>
-              <Link href="/">Custom Report</Link>
+              <Link href="/custom-report">Custom Report</Link>
             </Button>
           </div>
         </div>
