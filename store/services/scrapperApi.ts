@@ -3,23 +3,43 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
 export interface Application {
-  id: string;
-  application_number: string;
-  address: string;
-  status: string;
-  decision_date?: string;
-  // Add other fields as needed based on your API response
+  "Application Name": string;
+  Address: string;
+  Conditions: Record<string, any>;
+  Status: string;
+  Application_Ref: string;
+  Decision: string;
+  "Decisions Conditions": Record<string, any>;
+  UPRN: string;
+  "Decision Date": string;
+  Borough: string;
+  Contacted: boolean;
+  Actions: boolean;
+  "URL Planning App": string;
+  "LPA App No": string;
 }
 
 export interface GetApplicationsParams {
-  page?: number;
-  page_size?: number;
-  borough?: string;
-  status?: string;
-  start_date?: string;
-  end_date?: string;
-  sort?: string;
-  search?: string;
+  page?: number | null;
+  page_size?: number | null;
+  borough?: string | null;
+  status?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  sort?: string | null;
+  search?: string | null;
+}
+
+export interface GetApplicationsByConditionParams {
+  condition: string;
+  page?: number | null;
+  page_size?: number | null;
+  borough?: string | null;
+  status?: string | null;
+  search?: string | null;
+  start_date?: string | null;
+  end_date?: string | null;
+  sort?: string | null;
 }
 
 export interface UpdateApplicationStatusRequest {
@@ -45,9 +65,9 @@ export const scrapperApi = createApi({
         const queryParams = new URLSearchParams();
 
         if (params) {
-          if (params.page !== undefined)
+          if (params.page !== undefined && params.page !== null)
             queryParams.append("page", params.page.toString());
-          if (params.page_size !== undefined)
+          if (params.page_size !== undefined && params.page_size !== null)
             queryParams.append("page_size", params.page_size.toString());
           if (params.borough) queryParams.append("borough", params.borough);
           if (params.status) queryParams.append("status", params.status);
@@ -55,13 +75,42 @@ export const scrapperApi = createApi({
             queryParams.append("start_date", params.start_date);
           if (params.end_date) queryParams.append("end_date", params.end_date);
           if (params.sort) queryParams.append("sort", params.sort);
-          if (params.borough) queryParams.append("borough", params.borough);
+          if (params.search) queryParams.append("search", params.search);
         }
 
         return {
           url: `/api/v1/applications${
             queryParams.toString() ? `?${queryParams.toString()}` : ""
           }`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Applications"],
+    }),
+    getApplicationsByCondition: builder.query<
+      any,
+      GetApplicationsByConditionParams
+    >({
+      query: (params) => {
+        const queryParams = new URLSearchParams();
+
+        // condition is required
+        queryParams.append("condition", params.condition);
+
+        if (params.page !== undefined && params.page !== null)
+          queryParams.append("page", params.page.toString());
+        if (params.page_size !== undefined && params.page_size !== null)
+          queryParams.append("page_size", params.page_size.toString());
+        if (params.borough) queryParams.append("borough", params.borough);
+        if (params.status) queryParams.append("status", params.status);
+        if (params.start_date)
+          queryParams.append("start_date", params.start_date);
+        if (params.end_date) queryParams.append("end_date", params.end_date);
+        if (params.sort) queryParams.append("sort", params.sort);
+        if (params.search) queryParams.append("search", params.search);
+
+        return {
+          url: `/api/v1/applications-by-condition?${queryParams.toString()}`,
           method: "GET",
         };
       },
@@ -81,5 +130,8 @@ export const scrapperApi = createApi({
   }),
 });
 
-export const { useGetApplicationsQuery, useUpdateApplicationStatusMutation } =
-  scrapperApi;
+export const {
+  useGetApplicationsQuery,
+  useGetApplicationsByConditionQuery,
+  useUpdateApplicationStatusMutation,
+} = scrapperApi;

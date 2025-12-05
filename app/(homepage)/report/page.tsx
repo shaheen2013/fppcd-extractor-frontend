@@ -3,7 +3,7 @@
 import Header from "@/app/components/header";
 import { Button } from "@/components/ui/button";
 import {
-  useGetApplicationsQuery,
+  useGetApplicationsByConditionQuery,
   useUpdateApplicationStatusMutation,
 } from "@/store/services/scrapperApi";
 import Link from "next/link";
@@ -29,13 +29,13 @@ function PlanningApplicationsReportContent() {
 
   const {
     data: dataApplications,
-    isLoading: loadingApplications,
     isFetching: fetchingApplications,
     error: errorGettingApplications,
-  } = useGetApplicationsQuery({
+  } = useGetApplicationsByConditionQuery({
+    condition: conditions,
     page: currentPage,
     page_size: pageSize,
-    borough: debouncedSearch || undefined,
+    search: debouncedSearch,
   });
 
   const [updateApplicationStatus, { isLoading: isUpdating }] =

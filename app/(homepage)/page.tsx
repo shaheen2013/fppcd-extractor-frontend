@@ -9,7 +9,7 @@ import Link from "next/link";
 import { useSession } from "next-auth/react";
 
 export default function Home() {
-  const [selectedConditions, setSelectedConditions] = useState<string[]>([]);
+  const [selectedCondition, setSelectedCondition] = useState<string>("");
 
   const planningConditions = [
     {
@@ -136,12 +136,10 @@ export default function Home() {
     href?: string;
     icon?: JSX.Element;
   }) => {
-    if (selectedConditions.includes(condition.name)) {
-      setSelectedConditions(
-        selectedConditions.filter((c) => c !== condition.name)
-      );
+    if (selectedCondition === condition.name) {
+      setSelectedCondition("");
     } else {
-      setSelectedConditions([...selectedConditions, condition.name]);
+      setSelectedCondition(condition.name);
     }
   };
 
@@ -149,7 +147,7 @@ export default function Home() {
     // Logic to generate report based on selected conditions
   };
 
-  const { data: session, status } = useSession();
+  const { data: session } = useSession();
 
   console.log("session => ", session);
 
@@ -177,7 +175,7 @@ export default function Home() {
         <div className="container my-16 mx-auto grid lg:grid-cols-3 gap-8">
           {/* item */}
           {planningConditions.map((condition, index) => {
-            const isSelected = selectedConditions.includes(condition.name);
+            const isSelected = selectedCondition === condition.name;
 
             return (
               <div
@@ -204,13 +202,13 @@ export default function Home() {
         <div className="flex justify-center mb-12 gap-4">
           <Link
             href={`/report?conditions=${encodeURIComponent(
-              selectedConditions.join(",")
+              selectedCondition
             )}`}
           >
             <Button
               variant="defaultBlue"
               className="py-4 h-11"
-              disabled={selectedConditions.length === 0}
+              disabled={!selectedCondition}
               onClick={handleGenerate}
             >
               <svg
@@ -229,7 +227,7 @@ export default function Home() {
                 <path d="m21 21-4.34-4.34"></path>
                 <circle cx="11" cy="11" r="8"></circle>
               </svg>
-              Generate Report ({selectedConditions.length} conditions selected)
+              Generate Report{selectedCondition ? ` (${selectedCondition})` : ""}
             </Button>
           </Link>
           <Link href="/custom-report">
