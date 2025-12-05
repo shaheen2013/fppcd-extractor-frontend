@@ -15,6 +15,7 @@ export default function Home() {
     {
       name: "Heritage & Listed Buildings",
       href: "/report?data=1",
+      value: "Heritage",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -40,6 +41,8 @@ export default function Home() {
     {
       name: "Archaeology",
       href: "/report?data=1",
+      value: "Archaeology",
+
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -63,6 +66,8 @@ export default function Home() {
     {
       name: "Conservation Areas",
       href: "/report?data=1",
+      value: "Conservation",
+
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -85,6 +90,7 @@ export default function Home() {
     {
       name: "Landscaping",
       href: "/report?data=1",
+      value: "Landscaping",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -110,6 +116,7 @@ export default function Home() {
     {
       name: "Ecology",
       href: "/report?data=1",
+      value: "Ecology",
       icon: (
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -132,14 +139,14 @@ export default function Home() {
   ];
 
   const handleSelect = (condition: {
-    name: string;
+    value: string;
     href?: string;
     icon?: JSX.Element;
   }) => {
-    if (selectedCondition === condition.name) {
+    if (selectedCondition === condition.value) {
       setSelectedCondition("");
     } else {
-      setSelectedCondition(condition.name);
+      setSelectedCondition(condition.value);
     }
   };
 
@@ -175,7 +182,7 @@ export default function Home() {
         <div className="container my-16 mx-auto grid lg:grid-cols-3 gap-8">
           {/* item */}
           {planningConditions.map((condition, index) => {
-            const isSelected = selectedCondition === condition.name;
+            const isSelected = selectedCondition === condition.value;
 
             return (
               <div

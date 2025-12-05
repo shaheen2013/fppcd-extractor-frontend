@@ -340,7 +340,9 @@ function PlanningApplicationsReportContent() {
                     </tr>
                   </thead>
                   <tbody>
-                    {dataApplications?.data?.map((app: any, idx: any) => {
+                    {dataApplications?.data
+                      ?.filter((app: any) => app["Conditions"] !== null)
+                      ?.map((app: any, idx: any) => {
                       // console.log("application => ", app);
                       return (
                         <tr key={idx} className="border-b hover:bg-gray-50">
