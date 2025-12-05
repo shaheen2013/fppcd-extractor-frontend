@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
 import { JWT } from "next-auth/jwt";
+import CredentialsProvider from "next-auth/providers/credentials";
 
 const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL;
 
@@ -68,15 +68,6 @@ const handler = NextAuth({
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
-        // Replace with your own authentication logic
-        // if (
-        //   credentials?.username === "admin" &&
-        //   credentials?.password === "admin"
-        // ) {
-        //   return { id: "1", name: "Admin User", email: "admin@example.com" };
-        // }
-        // return null;
-
         try {
           const res = await fetch(`${BACKEND_URL}/auth/login`, {
             method: "POST",

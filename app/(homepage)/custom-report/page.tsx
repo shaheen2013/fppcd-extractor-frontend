@@ -8,9 +8,16 @@ import {
 } from "@/store/services/scrapperApi";
 import Link from "next/link";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Suspense } from "react";
+import { Suspense, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 function CustomReportContent() {
   const router = useRouter();
@@ -19,6 +26,8 @@ function CustomReportContent() {
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const pageSize = 10;
+  const [status, setStatus] = useState("All Statuses");
+  const [conditionType, setConditionType] = useState("All Condition Types");
 
   const {
     data: dataApplications,
@@ -210,8 +219,8 @@ function CustomReportContent() {
                     Date From
                   </label>
                   <input
-                    type="text"
-                    placeholder="Enter location (e.g., London, Birmingham)"
+                    type="date"
+                    placeholder="mm/dd/yyyy"
                     className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
                   />
                 </div>
@@ -224,8 +233,8 @@ function CustomReportContent() {
                     Date To
                   </label>
                   <input
-                    type="text"
-                    placeholder="Enter location (e.g., London, Birmingham)"
+                    type="date"
+                    placeholder="mm/dd/yyyy"
                     className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
                   />
                 </div>
@@ -234,29 +243,49 @@ function CustomReportContent() {
               <div className="flex flex-col">
                 <label
                   htmlFor=""
-                  className="font-medium text-sm text-gray-800 "
+                  className="font-medium text-sm text-gray-800 mb-1"
                 >
                   Application Status
                 </label>
-                <input
-                  type="text"
-                  placeholder="Enter location (e.g., London, Birmingham)"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
-                />
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger className="w-full h-9">
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All Statuses">All Statuses</SelectItem>
+                    <SelectItem value="Approved">Approved</SelectItem>
+                    <SelectItem value="Rejected">Rejected</SelectItem>
+                    <SelectItem value="Pending">Pending</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <div className="flex flex-col">
                 <label
                   htmlFor=""
-                  className="font-medium text-sm text-gray-800 "
+                  className="font-medium text-sm text-gray-800 mb-1"
                 >
                   Condition Type
                 </label>
-                <input
-                  type="text"
-                  placeholder="Enter location (e.g., London, Birmingham)"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
-                />
+                <Select value={conditionType} onValueChange={setConditionType}>
+                  <SelectTrigger className="w-full h-9">
+                    <SelectValue placeholder="Select condition type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="All Condition Types">
+                      All Condition Types
+                    </SelectItem>
+                    <SelectItem value="Heritage & Listed Buildings">
+                      Heritage & Listed Buildings
+                    </SelectItem>
+                    <SelectItem value="Archaeology">Archaeology</SelectItem>
+                    <SelectItem value="Conservation Areas">
+                      Conservation Areas
+                    </SelectItem>
+                    <SelectItem value="Landscaping">Landscaping</SelectItem>
+                    <SelectItem value="Ecology">Ecology</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
 
               <input
@@ -281,33 +310,6 @@ function CustomReportContent() {
                 </p>
               </div>
               <div className="flex gap-2">
-                <Button
-                  variant="outline"
-                  className="font-semibold hover:bg-transparent"
-                  onClick={() => {
-                    print();
-                  }}
-                >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="lucide lucide-printer mr-1 h-4 w-4"
-                    aria-hidden="true"
-                  >
-                    <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path>
-                    <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"></path>
-                    <rect x="6" y="14" width="12" height="8" rx="1"></rect>
-                  </svg>
-                  Print
-                </Button>
-
                 <Button
                   variant="outline"
                   className="font-semibold hover:bg-transparent"
