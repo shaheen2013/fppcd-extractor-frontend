@@ -350,7 +350,7 @@ function PlanningApplicationsReportContent() {
                           <td className="p-3 font-normal text-sm min-w-[250px]">
                             {app["Address"] || "N/A"}
                           </td>
-                          <td className="p-3 flex flex-wrap gap-2">
+                          <td className="p-3 flex flex-wrap gap-2 mt-2">
                             {Array.isArray(app["Conditions"]) ? (
                               app["Conditions"].map((c: any, i: any) => (
                                 <span
@@ -361,7 +361,7 @@ function PlanningApplicationsReportContent() {
                                 </span>
                               ))
                             ) : (
-                              <span className="text-gray-500 text-xs mt-2">
+                              <span className="text-gray-500 text-xs">
                                 No conditions
                               </span>
                             )}
