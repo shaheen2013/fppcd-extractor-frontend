@@ -343,79 +343,79 @@ function PlanningApplicationsReportContent() {
                     {dataApplications?.data
                       ?.filter((app: any) => app["Conditions"] !== null)
                       ?.map((app: any, idx: any) => {
-                      // console.log("application => ", app);
-                      return (
-                        <tr key={idx} className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium text-sm min-w-[200px]">
-                            {app["Application Name"] || "N/A"}
-                          </td>
-                          <td className="p-3 font-normal text-sm min-w-[250px]">
-                            {app["Address"] || "N/A"}
-                          </td>
-                          <td className="p-3 flex flex-wrap gap-2 mt-2">
-                            {Array.isArray(app["Conditions"]) ? (
-                              app["Conditions"].map((c: any, i: any) => (
-                                <span
-                                  key={i}
-                                  className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
-                                >
-                                  {c}
+                        // console.log("application => ", app);
+                        return (
+                          <tr key={idx} className="border-b hover:bg-gray-50">
+                            <td className="p-3 font-medium text-sm min-w-[200px]">
+                              {app["Application Name"] || "N/A"}
+                            </td>
+                            <td className="p-3 font-normal text-sm min-w-[250px]">
+                              {app["Address"] || "N/A"}
+                            </td>
+                            <td className="p-3 flex flex-wrap gap-2 mt-2">
+                              {Array.isArray(app["Conditions"]) ? (
+                                app["Conditions"].map((c: any, i: any) => (
+                                  <span
+                                    key={i}
+                                    className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
+                                  >
+                                    {c}
+                                  </span>
+                                ))
+                              ) : (
+                                <span className="text-gray-500 text-xs">
+                                  No conditions
                                 </span>
-                              ))
-                            ) : (
-                              <span className="text-gray-500 text-xs">
-                                No conditions
+                              )}
+                            </td>
+                            <td className="p-3">
+                              <span
+                                className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                                  app.Status === "Approved"
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-red-100 text-red-800"
+                                }`}
+                              >
+                                {app.Status}
                               </span>
-                            )}
-                          </td>
-                          <td className="p-3">
-                            <span
-                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                                app.Status === "Approved"
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {app.Status}
-                            </span>
-                          </td>
+                            </td>
 
-                          <td className="p-3">
-                            <span
-                              className={`px-3 py-1 rounded-md text-xs font-semibold ${
-                                app.Contacted
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-gray-200 text-gray-600"
-                              }`}
-                            >
-                              {app.Contacted ? "Yes" : "No"}
-                            </span>
-                          </td>
+                            <td className="p-3">
+                              <span
+                                className={`px-3 py-1 rounded-md text-xs font-semibold ${
+                                  app.Contacted
+                                    ? "bg-green-100 text-green-800"
+                                    : "bg-gray-200 text-gray-600"
+                                }`}
+                              >
+                                {app.Contacted ? "Yes" : "No"}
+                              </span>
+                            </td>
 
-                          <td className="p-3">
-                            {app.Contacted ? (
-                              <Button
-                                onClick={() => handleMark(app)}
-                                disabled={isUpdating}
-                                className="text-red-600 bg-transparent border border-red-400
+                            <td className="p-3">
+                              {app.Contacted ? (
+                                <Button
+                                  onClick={() => handleMark(app)}
+                                  disabled={isUpdating}
+                                  className="text-red-600 bg-transparent border border-red-400
                             hover:text-black hover:bg-red-50 disabled:opacity-50"
-                              >
-                                Mark as Not Contacted
-                              </Button>
-                            ) : (
-                              <Button
-                                onClick={() => handleMark(app)}
-                                disabled={isUpdating}
-                                className="text-green-700 bg-transparent border border-green-500
+                                >
+                                  Mark as Not Contacted
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={() => handleMark(app)}
+                                  disabled={isUpdating}
+                                  className="text-green-700 bg-transparent border border-green-500
                             hover:text-black hover:bg-green-50 disabled:opacity-50"
-                              >
-                                Mark as Contacted
-                              </Button>
-                            )}
-                          </td>
-                        </tr>
-                      );
-                    })}
+                                >
+                                  Mark as Contacted
+                                </Button>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
 
                     {dataApplications?.data?.length === 0 && (
                       <tr>
