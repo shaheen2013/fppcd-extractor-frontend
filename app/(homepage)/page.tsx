@@ -201,9 +201,7 @@ export default function Home() {
 
         <div className="flex justify-center mb-12 gap-4">
           <Link
-            href={`/report?conditions=${encodeURIComponent(
-              selectedCondition
-            )}`}
+            href={`/report?conditions=${encodeURIComponent(selectedCondition)}`}
           >
             <Button
               variant="defaultBlue"
@@ -227,7 +225,8 @@ export default function Home() {
                 <path d="m21 21-4.34-4.34"></path>
                 <circle cx="11" cy="11" r="8"></circle>
               </svg>
-              Generate Report{selectedCondition ? ` (${selectedCondition})` : ""}
+              Generate Report
+              {selectedCondition ? ` (${selectedCondition})` : ""}
             </Button>
           </Link>
           <Link href="/custom-report">
