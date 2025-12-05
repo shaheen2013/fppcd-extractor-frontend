@@ -163,7 +163,7 @@ function CustomReportContent() {
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-8">
+        <div className="grid xl:grid-cols-4 grid-cols-1 gap-8">
           {/* left */}
           <div className="container mx-auto bg-white shadow-xl rounded-xl">
             <div className="flex justify-between items-center mb-6 px-6 py-7 bg-blue-50">
@@ -297,7 +297,7 @@ function CustomReportContent() {
           </div>
 
           {/* right */}
-          <div className="container mx-auto bg-white shadow-xl rounded-xl col-span-3">
+          <div className="container mx-auto bg-white shadow-xl rounded-xl lg:col-span-3">
             <div className="flex justify-between items-center mb-6 px-6 py-7 bg-blue-50">
               <div>
                 <h1 className="text-2xl font-normal text-gray-700 mb-1">
