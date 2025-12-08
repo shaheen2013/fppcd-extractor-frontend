@@ -18,6 +18,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Calendar } from "@/components/ui/calendar";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
+import { cn } from "@/lib/utils";
 
 function CustomReportContent() {
   const router = useRouter();
@@ -28,6 +37,8 @@ function CustomReportContent() {
   const pageSize = 10;
   const [status, setStatus] = useState("All Statuses");
   const [conditionType, setConditionType] = useState("All Condition Types");
+  const [dateFrom, setDateFrom] = useState<Date>();
+  const [dateTo, setDateTo] = useState<Date>();
 
   const {
     data: dataApplications,
@@ -206,7 +217,7 @@ function CustomReportContent() {
                 <input
                   type="text"
                   placeholder="Enter location (e.g., London, Birmingham)"
-                  className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-10"
                 />
               </div>
 
@@ -214,29 +225,68 @@ function CustomReportContent() {
                 <div className="flex flex-col">
                   <label
                     htmlFor=""
-                    className="font-medium text-sm text-gray-800 "
+                    className="font-medium text-sm text-gray-800 mb-1"
                   >
                     Date From
                   </label>
-                  <input
-                    type="date"
-                    placeholder="mm/dd/yyyy"
-                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full h-10 justify-start text-left font-normal px-3",
+                          !dateFrom && "text-muted-foreground"
+                        )}
+                      >
+                        {dateFrom ? (
+                          format(dateFrom, "MM/dd/yyyy")
+                        ) : (
+                          <span>mm/dd/yyyy</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={dateFrom}
+                        onSelect={setDateFrom}
+                        initialFocus
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
 
                 <div className="flex flex-col">
                   <label
                     htmlFor=""
-                    className="font-medium text-sm text-gray-800 "
+                    className="font-medium text-sm text-gray-800 mb-1"
                   >
                     Date To
                   </label>
-                  <input
-                    type="date"
-                    placeholder="mm/dd/yyyy"
-                    className="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-9"
-                  />
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={cn(
+                          "w-full h-10 justify-start text-left font-normal px-3",
+                          !dateTo && "text-muted-foreground"
+                        )}
+                      >
+                        {dateTo ? (
+                          format(dateTo, "MM/dd/yyyy")
+                        ) : (
+                          <span>mm/dd/yyyy</span>
+                        )}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <Calendar
+                        mode="single"
+                        selected={dateTo}
+                        onSelect={setDateTo}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
 
@@ -248,7 +298,7 @@ function CustomReportContent() {
                   Application Status
                 </label>
                 <Select value={status} onValueChange={setStatus}>
-                  <SelectTrigger className="w-full h-9">
+                  <SelectTrigger className="w-full h-10">
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
@@ -268,7 +318,7 @@ function CustomReportContent() {
                   Condition Type
                 </label>
                 <Select value={conditionType} onValueChange={setConditionType}>
-                  <SelectTrigger className="w-full h-9">
+                  <SelectTrigger className="w-full h-10">
                     <SelectValue placeholder="Select condition type" />
                   </SelectTrigger>
                   <SelectContent>
