@@ -1,33 +1,39 @@
 "use client";
 
-import Header from "@/app/components/header";
-import { Button } from "@/components/ui/button";
-import {
-  useGetApplicationsCustomFiltersQuery,
-  useUpdateApplicationStatusMutation,
-} from "@/store/services/scrapperApi";
 import Link from "next/link";
-import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { Suspense, useState } from "react";
 import ReactPaginate from "react-paginate";
+
+import { format } from "date-fns";
 import { toast } from "react-toastify";
+import { Suspense, useState } from "react";
 import { useDebounceValue } from "usehooks-ts";
+import { useSearchParams, useRouter, usePathname } from "next/navigation";
+
 import {
   Select,
-  SelectContent,
   SelectItem,
-  SelectTrigger,
   SelectValue,
+  SelectTrigger,
+  SelectContent,
 } from "@/components/ui/select";
-import { Calendar } from "@/components/ui/calendar";
+
+import {
+  useUpdateApplicationStatusMutation,
+  useGetApplicationsCustomFiltersQuery,
+} from "@/store/services/scrapperApi";
+
 import {
   Popover,
-  PopoverContent,
   PopoverTrigger,
+  PopoverContent,
 } from "@/components/ui/popover";
-import { format } from "date-fns";
+
+import Header from "@/app/components/header";
+
 import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import { getConditionType } from "@/static/data";
+import { Calendar } from "@/components/ui/calendar";
 
 function CustomReportContent() {
   const router = useRouter();
@@ -36,6 +42,7 @@ function CustomReportContent() {
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const pageSize = 10;
+
   const [location, setLocation] = useState("");
   const [debouncedLocation] = useDebounceValue(location, 500);
   const [status, setStatus] = useState("All Statuses");
@@ -89,28 +96,7 @@ function CustomReportContent() {
 
   const conditionTypeList = getConditionType();
 
-  console.log("conditionType => ", conditionType);
-
-  if (errorGettingApplications) {
-    return (
-      <>
-        <Header subtitle="Custom Report" />
-        <div className="p-9 bg-[F8FAFC] min-h-screen">
-          <div className="container mx-auto">
-            <div className="bg-white shadow rounded-xl p-6">
-              <h2 className="text-2xl font-semibold text-red-600">
-                Error Loading Applications
-              </h2>
-              <p className="mt-4 text-gray-600">
-                There was an error fetching the planning applications. Please
-                try again later.
-              </p>
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  }
+  if (errorGettingApplications) return <CustomReportError />;
 
   return (
     <>
@@ -636,6 +622,27 @@ function CustomReportContent() {
       </div>
     </>
   );
+
+  function CustomReportError() {
+    return (
+      <>
+        <Header subtitle="Custom Report" />
+        <div className="p-9 bg-[F8FAFC] min-h-screen">
+          <div className="container mx-auto">
+            <div className="bg-white shadow rounded-xl p-6">
+              <h2 className="text-2xl font-semibold text-red-600">
+                Error Loading Applications
+              </h2>
+              <p className="mt-4 text-gray-600">
+                There was an error fetching the planning applications. Please
+                try again later.
+              </p>
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  }
 }
 
 export default function CustomReportPage() {
