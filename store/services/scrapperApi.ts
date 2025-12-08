@@ -116,7 +116,10 @@ export const scrapperApi = createApi({
       },
       providesTags: ["Applications"],
     }),
-    getApplicationsCustomFilters: builder.query<any, GetApplicationsParams | void>({
+    getApplicationsCustomFilters: builder.query<
+      any,
+      GetApplicationsParams | void
+    >({
       query: (params) => {
         const queryParams = new URLSearchParams();
 
