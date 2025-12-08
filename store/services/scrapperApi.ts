@@ -116,6 +116,33 @@ export const scrapperApi = createApi({
       },
       providesTags: ["Applications"],
     }),
+    getApplicationsCustomFilters: builder.query<any, GetApplicationsParams | void>({
+      query: (params) => {
+        const queryParams = new URLSearchParams();
+
+        if (params) {
+          if (params.page !== undefined && params.page !== null)
+            queryParams.append("page", params.page.toString());
+          if (params.page_size !== undefined && params.page_size !== null)
+            queryParams.append("page_size", params.page_size.toString());
+          if (params.borough) queryParams.append("borough", params.borough);
+          if (params.status) queryParams.append("status", params.status);
+          if (params.start_date)
+            queryParams.append("start_date", params.start_date);
+          if (params.end_date) queryParams.append("end_date", params.end_date);
+          if (params.sort) queryParams.append("sort", params.sort);
+          if (params.search) queryParams.append("search", params.search);
+        }
+
+        return {
+          url: `/api/v1/applications-custom-filters${
+            queryParams.toString() ? `?${queryParams.toString()}` : ""
+          }`,
+          method: "GET",
+        };
+      },
+      providesTags: ["Applications"],
+    }),
     updateApplicationStatus: builder.mutation<
       UpdateApplicationStatusResponse,
       UpdateApplicationStatusRequest
@@ -133,5 +160,6 @@ export const scrapperApi = createApi({
 export const {
   useGetApplicationsQuery,
   useGetApplicationsByConditionQuery,
+  useGetApplicationsCustomFiltersQuery,
   useUpdateApplicationStatusMutation,
 } = scrapperApi;
