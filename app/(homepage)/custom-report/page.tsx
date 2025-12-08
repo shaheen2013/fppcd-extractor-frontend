@@ -27,6 +27,7 @@ import {
 } from "@/components/ui/popover";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
+import { getConditionType } from "@/static/data";
 
 function CustomReportContent() {
   const router = useRouter();
@@ -85,6 +86,10 @@ function CustomReportContent() {
       toast.error(error?.data?.message || "Failed to update status");
     }
   };
+
+  const conditionTypeList = getConditionType();
+
+  console.log("conditionType => ", conditionType);
 
   if (errorGettingApplications) {
     return (
@@ -332,7 +337,17 @@ function CustomReportContent() {
                     <SelectItem value="All Condition Types">
                       All Condition Types
                     </SelectItem>
-                    <SelectItem value="Heritage & Listed Buildings">
+                    {conditionTypeList.map((condition, index) => {
+                      return (
+                        <SelectItem key={index} value={condition.value}>
+                          {condition.name}
+                        </SelectItem>
+                      );
+                    })}
+                    {/* <SelectItem value="All Condition Types">
+                      All Condition Types
+                    </SelectItem>
+                    <SelectItem value="Heritage">
                       Heritage & Listed Buildings
                     </SelectItem>
                     <SelectItem value="Archaeology">Archaeology</SelectItem>
@@ -340,15 +355,14 @@ function CustomReportContent() {
                       Conservation Areas
                     </SelectItem>
                     <SelectItem value="Landscaping">Landscaping</SelectItem>
-                    <SelectItem value="Ecology">Ecology</SelectItem>
+                    <SelectItem value="Ecology">Ecology</SelectItem> */}
                   </SelectContent>
                 </Select>
               </div>
 
               <input
-                type="submit"
                 value="Generate Report"
-                className="mt-4 w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 cursor-pointer"
+                className="mt-4 w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 cursor-pointer block text-center"
               />
             </form>
           </div>
@@ -550,9 +564,34 @@ function CustomReportContent() {
                         <tr>
                           <td
                             colSpan={6}
-                            className="p-6 text-center text-gray-600"
+                            className="p-6 text-center text-gray-600 py-32"
                           >
-                            No applications found.
+                            <div>
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="24"
+                                height="24"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                className="lucide lucide-search h-12 w-12 text-slate-300 mx-auto mb-4"
+                                aria-hidden="true"
+                              >
+                                <path d="m21 21-4.34-4.34"></path>
+                                <circle cx="11" cy="11" r="8"></circle>
+                              </svg>
+                            </div>
+                            <p className="text-lg font-medium mb-2 text-gray-800">
+                              No results yet
+                            </p>
+
+                            <p className="text-gray-600 max-w-lg mx-auto">
+                              Use the filters on the left to search for planning
+                              applications with specific conditions.
+                            </p>
                           </td>
                         </tr>
                       )}
