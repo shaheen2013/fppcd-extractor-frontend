@@ -3,7 +3,7 @@
 import Header from "@/app/components/header";
 import { Button } from "@/components/ui/button";
 import {
-  useGetApplicationsQuery,
+  useGetApplicationsCustomFiltersQuery,
   useUpdateApplicationStatusMutation,
 } from "@/store/services/scrapperApi";
 import Link from "next/link";
@@ -11,6 +11,7 @@ import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import { Suspense, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { toast } from "react-toastify";
+import { useDebounceValue } from "usehooks-ts";
 import {
   Select,
   SelectContent,
@@ -34,6 +35,8 @@ function CustomReportContent() {
 
   const currentPage = Number(searchParams.get("page")) || 1;
   const pageSize = 10;
+  const [location, setLocation] = useState("");
+  const [debouncedLocation] = useDebounceValue(location, 500);
   const [status, setStatus] = useState("All Statuses");
   const [conditionType, setConditionType] = useState("All Condition Types");
   const [dateFrom, setDateFrom] = useState<Date>();
@@ -43,11 +46,14 @@ function CustomReportContent() {
     data: dataApplications,
     isFetching: fetchingApplications,
     error: errorGettingApplications,
-  } = useGetApplicationsQuery({
+  } = useGetApplicationsCustomFiltersQuery({
     page: currentPage,
     page_size: pageSize,
-    // Pass conditions if your API supports it; otherwise remove
-    // conditions: conditions || undefined,
+    borough: debouncedLocation || null,
+    status: status !== "All Statuses" ? status : null,
+    start_date: dateFrom ? format(dateFrom, "yyyy-MM-dd") : null,
+    end_date: dateTo ? format(dateTo, "yyyy-MM-dd") : null,
+    search: conditionType !== "All Condition Types" ? conditionType : null,
   });
 
   const [updateApplicationStatus, { isLoading: isUpdating }] =
@@ -215,6 +221,8 @@ function CustomReportContent() {
                 </label>
                 <input
                   type="text"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
                   placeholder="Enter location (e.g., London, Birmingham)"
                   className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm h-10"
                 />
