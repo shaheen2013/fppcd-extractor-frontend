@@ -28,16 +28,16 @@ const menuItems = [
     url: "/admin/team-management",
     icon: Users,
   },
-  {
-    title: "Reports",
-    url: "/admin/reports",
-    icon: FileText,
-  },
-  {
-    title: "Settings",
-    url: "/admin/settings",
-    icon: Settings,
-  },
+  //   {
+  //     title: "Reports",
+  //     url: "/admin/reports",
+  //     icon: FileText,
+  //   },
+  //   {
+  //     title: "Settings",
+  //     url: "/admin/settings",
+  //     icon: Settings,
+  //   },
 ];
 
 export function AppSidebar() {
