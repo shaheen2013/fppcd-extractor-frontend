@@ -24,8 +24,8 @@ const menuItems = [
     icon: LayoutDashboard,
   },
   {
-    title: "Users",
-    url: "/admin/users",
+    title: "Team Management",
+    url: "/admin/team-management",
     icon: Users,
   },
   {
