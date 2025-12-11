@@ -12,6 +12,8 @@ import {
   Shield,
   CheckCircle,
   XCircle,
+  X,
+  Plus,
 } from "lucide-react";
 import {
   Card,
@@ -129,8 +131,9 @@ export default function TeamManagement() {
 
   // Invite dialog state
   const [inviteOpen, setInviteOpen] = useState(false);
-  const [inviteEmails, setInviteEmails] = useState("");
-  const [inviteRole, setInviteRole] = useState("Viewer");
+  const [inviteList, setInviteList] = useState<
+    { email: string; role: string }[]
+  >([{ email: "", role: "Viewer" }]);
 
   // Edit dialog state
   const [editOpen, setEditOpen] = useState(false);
@@ -160,26 +163,37 @@ export default function TeamManagement() {
 
   // Handle invite
   const handleInvite = () => {
-    const emails = inviteEmails
-      .split(",")
-      .map((e) => e.trim())
-      .filter((e) => e);
-
-    // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    const invalidEmails = emails.filter((email) => !emailRegex.test(email));
+
+    // Filter out empty emails
+    const validEntries = inviteList.filter((entry) => entry.email.trim());
+
+    if (validEntries.length === 0) {
+      alert("Please enter at least one email address");
+      return;
+    }
+
+    // Validate all emails
+    const invalidEmails = validEntries.filter(
+      (entry) => !emailRegex.test(entry.email)
+    );
 
     if (invalidEmails.length > 0) {
-      alert(`Invalid emails: ${invalidEmails.join(", ")}`);
+      alert(
+        `Invalid email(s): ${invalidEmails.map((e) => e.email).join(", ")}`
+      );
       return;
     }
 
     // In real app, send API request here
-    console.log("Inviting users:", emails, "with role:", inviteRole);
-    alert(`Invitation sent to: ${emails.join(", ")}`);
+    console.log("Inviting users:", validEntries);
+    alert(
+      `Invitation sent to: ${validEntries
+        .map((e) => `${e.email} (${e.role})`)
+        .join(", ")}`
+    );
 
-    setInviteEmails("");
-    setInviteRole("Viewer");
+    setInviteList([{ email: "", role: "Viewer" }]);
     setInviteOpen(false);
   };
 
@@ -218,40 +232,73 @@ export default function TeamManagement() {
               Invite Users
             </Button>
           </DialogTrigger>
-          <DialogContent>
+          <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Invite Team Members</DialogTitle>
               <DialogDescription>
-                Enter email addresses separated by commas to invite multiple
-                users
+                Add email addresses and assign roles individually
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="emails">Email Addresses</Label>
-                <Input
-                  id="emails"
-                  placeholder="john@example.com, jane@example.com"
-                  value={inviteEmails}
-                  onChange={(e) => setInviteEmails(e.target.value)}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Separate multiple emails with commas
-                </p>
+              <div className="space-y-2">
+                {inviteList.map((entry, index) => (
+                  <div key={index} className="flex gap-2">
+                    <div className="flex-1">
+                      <Input
+                        placeholder="email@example.com"
+                        value={entry.email}
+                        onChange={(e) => {
+                          const newList = [...inviteList];
+                          newList[index].email = e.target.value;
+                          setInviteList(newList);
+                        }}
+                      />
+                    </div>
+                    <div className="w-32">
+                      <Select
+                        value={entry.role}
+                        onValueChange={(value) => {
+                          const newList = [...inviteList];
+                          newList[index].role = value;
+                          setInviteList(newList);
+                        }}
+                      >
+                        <SelectTrigger>
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Admin">Admin</SelectItem>
+                          <SelectItem value="Editor">Editor</SelectItem>
+                          <SelectItem value="Viewer">Viewer</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    {inviteList.length > 1 && (
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        onClick={() => {
+                          setInviteList(
+                            inviteList.filter((_, i) => i !== index)
+                          );
+                        }}
+                      >
+                        <X className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
+                ))}
               </div>
-              <div className="grid gap-2">
-                <Label htmlFor="role">Role</Label>
-                <Select value={inviteRole} onValueChange={setInviteRole}>
-                  <SelectTrigger id="role">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="Admin">Admin</SelectItem>
-                    <SelectItem value="Editor">Editor</SelectItem>
-                    <SelectItem value="Viewer">Viewer</SelectItem>
-                  </SelectContent>
-                </Select>
-              </div>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  setInviteList([...inviteList, { email: "", role: "Viewer" }]);
+                }}
+                className="w-full"
+              >
+                <Plus className="mr-2 h-4 w-4" />
+                Add Another User
+              </Button>
             </div>
             <DialogFooter>
               <Button variant="outline" onClick={() => setInviteOpen(false)}>
