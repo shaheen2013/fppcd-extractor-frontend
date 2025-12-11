@@ -24,7 +24,7 @@ export default function AdminHeader({
         {/* Left Section */}
         <div className="text-center md:text-left">
           <Link
-            href="/admin"
+            href="/admin/dashboard"
             className="text-3xl md:text-4xl font-semibold text-white mb-2 inline-flex items-center gap-2"
             style={{
               textShadow:

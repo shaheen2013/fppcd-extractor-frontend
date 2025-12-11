@@ -12,7 +12,7 @@ export default function AdminLayout({
     <div className="min-h-screen">
       <AdminHeader />
       <SidebarProvider>
-        <div className="flex">
+        <div className="flex w-full">
           <AppSidebar />
           <main className="flex-1">
             <div className="p-4">
