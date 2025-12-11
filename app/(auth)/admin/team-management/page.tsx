@@ -126,16 +126,16 @@ export default function TeamManagement() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
-  
+
   // Invite dialog state
   const [inviteOpen, setInviteOpen] = useState(false);
   const [inviteEmails, setInviteEmails] = useState("");
   const [inviteRole, setInviteRole] = useState("Viewer");
-  
+
   // Edit dialog state
   const [editOpen, setEditOpen] = useState(false);
   const [editUser, setEditUser] = useState<User | null>(null);
-  
+
   // Delete dialog state
   const [deleteOpen, setDeleteOpen] = useState(false);
   const [deleteUserId, setDeleteUserId] = useState<string | null>(null);
@@ -164,11 +164,11 @@ export default function TeamManagement() {
       .split(",")
       .map((e) => e.trim())
       .filter((e) => e);
-    
+
     // Email validation
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const invalidEmails = emails.filter((email) => !emailRegex.test(email));
-    
+
     if (invalidEmails.length > 0) {
       alert(`Invalid emails: ${invalidEmails.join(", ")}`);
       return;
@@ -177,7 +177,7 @@ export default function TeamManagement() {
     // In real app, send API request here
     console.log("Inviting users:", emails, "with role:", inviteRole);
     alert(`Invitation sent to: ${emails.join(", ")}`);
-    
+
     setInviteEmails("");
     setInviteRole("Viewer");
     setInviteOpen(false);
@@ -187,12 +187,8 @@ export default function TeamManagement() {
   const handleEdit = () => {
     if (!editUser) return;
 
-    setUsers(
-      users.map((user) =>
-        user.id === editUser.id ? editUser : user
-      )
-    );
-    
+    setUsers(users.map((user) => (user.id === editUser.id ? editUser : user)));
+
     setEditOpen(false);
     setEditUser(null);
   };
@@ -226,7 +222,8 @@ export default function TeamManagement() {
             <DialogHeader>
               <DialogTitle>Invite Team Members</DialogTitle>
               <DialogDescription>
-                Enter email addresses separated by commas to invite multiple users
+                Enter email addresses separated by commas to invite multiple
+                users
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
@@ -270,9 +267,7 @@ export default function TeamManagement() {
       <Card>
         <CardHeader>
           <CardTitle>Filters</CardTitle>
-          <CardDescription>
-            Search and filter team members
-          </CardDescription>
+          <CardDescription>Search and filter team members</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col md:flex-row gap-4">
@@ -440,7 +435,9 @@ export default function TeamManagement() {
                 <Button
                   variant="outline"
                   size="sm"
-                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  onClick={() =>
+                    setCurrentPage((p) => Math.min(totalPages, p + 1))
+                  }
                   disabled={currentPage === totalPages}
                 >
                   Next
@@ -535,8 +532,8 @@ export default function TeamManagement() {
           <AlertDialogHeader>
             <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the user
-              account and remove their data from our servers.
+              This action cannot be undone. This will permanently delete the
+              user account and remove their data from our servers.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
