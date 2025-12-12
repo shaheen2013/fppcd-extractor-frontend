@@ -34,7 +34,12 @@ async function refreshAccessToken(token: JWT): Promise<JWT> {
     const refreshedTokens = await response.json();
 
     if (!response.ok) {
-      throw refreshedTokens;
+      console.error("Token refresh failed:", {
+        status: response.status,
+        statusText: response.statusText,
+        error: refreshedTokens,
+      });
+      throw new Error(refreshedTokens.detail || "Failed to refresh token");
     }
 
     // Decode the new access token to get expiration time
@@ -79,9 +84,6 @@ const handler = NextAuth({
           });
 
           const data = await res.json();
-
-          console.log("data => ", credentials);
-          console.log("data => ", data);
 
           if (!res.ok) {
             return null;

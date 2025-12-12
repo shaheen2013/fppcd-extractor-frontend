@@ -1,5 +1,5 @@
 export { default as proxy } from "next-auth/middleware";
 
 export const config = {
-  matcher: ["/", "/report"], // add more routes for protection as needed
+  matcher: ["/", "/report", "/admin/:path*"], // add more routes for protection as needed
 };

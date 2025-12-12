@@ -67,6 +67,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useSession } from "next-auth/react";
 
 // Mock user data
 const mockUsers = [
@@ -128,6 +129,10 @@ export default function TeamManagement() {
   const [statusFilter, setStatusFilter] = useState("all");
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize, setPageSize] = useState(10);
+
+  const { data: session, status } = useSession();
+
+  console.log("session from team management page => ", session);
 
   // Invite dialog state
   const [inviteOpen, setInviteOpen] = useState(false);
