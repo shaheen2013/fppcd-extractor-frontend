@@ -94,6 +94,21 @@ function CustomReportContent() {
     }
   };
 
+  const handleGenerateReport = (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // The fetching of applications is already handled by the useGetApplicationsCustomFiltersQuery hook
+    // which listens to changes in the filter states (location, status, dateFrom, dateTo, conditionType).
+    // So we don't need to do anything here. Just prevent the default form submission behavior.
+    console.log("Generating report with filters:", {
+      location,
+      status,
+      dateFrom,
+      dateTo,
+      conditionType,
+    });
+  }
+
   const conditionTypeList = getConditionType();
 
   if (errorGettingApplications) return <CustomReportError />;
@@ -202,7 +217,9 @@ function CustomReportContent() {
               </div>
             </div>
 
-            <form className="px-6 py-4 gap-y-4 flex flex-col">
+            <form className="px-6 py-4 gap-y-4 flex flex-col"
+              onSubmit={handleGenerateReport}
+            >
               <div className="flex flex-col">
                 <label
                   htmlFor=""
@@ -347,9 +364,9 @@ function CustomReportContent() {
               </div>
 
               <button
-                value="Generate Report"
+                type="submit"
                 className="mt-4 w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 cursor-pointer block text-center"
-              ></button>
+              >Generate Report</button>
             </form>
           </div>
 
