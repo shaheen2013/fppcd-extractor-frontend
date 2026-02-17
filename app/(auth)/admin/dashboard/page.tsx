@@ -131,7 +131,7 @@ export default function AdminDashboard() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent indicator="dot" />}
+                  content={(props) => <ChartTooltipContent {...props} indicator="dot" />}
                 />
                 <Area
                   dataKey="approved"
@@ -245,7 +245,7 @@ export default function AdminDashboard() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent />}
+                  content={(props) => <ChartTooltipContent {...props} />}
                 />
                 <Line
                   dataKey="applications"
@@ -289,7 +289,7 @@ export default function AdminDashboard() {
                 />
                 <ChartTooltip
                   cursor={false}
-                  content={<ChartTooltipContent indicator="dashed" />}
+                  content={(props) => <ChartTooltipContent {...props} indicator="dashed" />}
                 />
                 <Bar
                   dataKey="approved"
