@@ -174,7 +174,7 @@ function LoginContent() {
                 Forgot password?
               </a>
 
-              <span className=" text-gray-600 text-md">
+              {/* <span className=" text-gray-600 text-md">
                 Don&apos;t have an account?{" "}
                 <Link
                   href="/register"
@@ -182,7 +182,7 @@ function LoginContent() {
                 >
                   Sign up
                 </Link>
-              </span>
+              </span> */}
             </div>
           </form>
         </div>
