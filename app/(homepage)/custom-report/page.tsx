@@ -346,10 +346,10 @@ function CustomReportContent() {
                 </Select>
               </div>
 
-              <input
+              <button
                 value="Generate Report"
                 className="mt-4 w-full bg-blue-600 text-white py-3 rounded-md font-semibold hover:bg-blue-700 cursor-pointer block text-center"
-              />
+              ></button>
             </form>
           </div>
 
@@ -489,7 +489,7 @@ function CustomReportContent() {
                                   key={i}
                                   className="bg-blue-100 text-blue-700 px-2 py-1 rounded-md text-xs font-medium"
                                 >
-                                  {c}
+                                  {c.category}
                                 </span>
                               ))
                             ) : (
