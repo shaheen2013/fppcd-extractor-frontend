@@ -292,6 +292,7 @@ export default function PlanningApplicationsReportContent() {
                     <tr className="border-b text-gray-900">
                       <th className="p-2 font-medium">Application Name</th>
                       <th className="p-2 font-medium">Address</th>
+                      <th className="p-2 font-medium">URL</th>
                       <th className="p-2 font-medium">Conditions</th>
                       <th className="p-2 font-medium">Status</th>
                       <th className="p-2 font-medium">Contacted</th>
@@ -302,15 +303,15 @@ export default function PlanningApplicationsReportContent() {
                     {[...Array(5)].map((_, idx) => (
                       <tr key={idx} className="border-b">
                         <td className="p-3">
-                          <div className="h-4 bg-gray-200 rounded animate-pulse w-3/4"></div>
+                          <div className="h-6 bg-gray-200 rounded animate-pulse w-3/4"></div>
                         </td>
                         <td className="p-3">
-                          <div className="h-4 bg-gray-200 rounded animate-pulse w-full"></div>
+                          <div className="h-6 bg-gray-200 rounded animate-pulse w-full"></div>
                         </td>
+
                         <td className="p-3">
                           <div className="flex gap-2">
                             <div className="h-6 w-24 bg-gray-200 rounded animate-pulse"></div>
-                            <div className="h-6 w-20 bg-gray-200 rounded animate-pulse"></div>
                           </div>
                         </td>
                         <td className="p-3">
@@ -320,6 +321,9 @@ export default function PlanningApplicationsReportContent() {
                           <div className="h-6 w-16 bg-gray-200 rounded animate-pulse"></div>
                         </td>
                         <td className="p-3">
+                          <div className="h-9 w-36 bg-gray-200 rounded animate-pulse"></div>
+                        </td>
+                                    <td className="p-3">
                           <div className="h-9 w-36 bg-gray-200 rounded animate-pulse"></div>
                         </td>
                       </tr>
@@ -332,6 +336,7 @@ export default function PlanningApplicationsReportContent() {
                     <tr className="border-b text-gray-900">
                       <th className="p-2 font-medium">Application Name</th>
                       <th className="p-2 font-medium">Address</th>
+                      <th className="p-2 font-medium">URL</th>
                       <th className="p-2 font-medium">Conditions</th>
                       <th className="p-2 font-medium">Status</th>
                       <th className="p-2 font-medium">Contacted</th>
@@ -349,6 +354,36 @@ export default function PlanningApplicationsReportContent() {
                             </td>
                             <td className="p-3 font-normal text-sm min-w-[250px]">
                               {app["Address"] || "N/A"}
+                            </td>
+
+                            <td className="p-3 font-normal text-sm min-w-[250px]">
+                              {app["URL Planning App"] ? (
+                                <a
+                                  href={app["URL Planning App"]}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="text-blue-600 hover:underline inline-flex items-center gap-1"
+                                >
+                                  <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  >
+                                    <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                    <polyline points="15 3 21 3 21 9"></polyline>
+                                    <line x1="10" y1="14" x2="21" y2="3"></line>
+                                  </svg>
+                                  View Application
+                                </a>
+                              ) : (
+                                "N/A"
+                              )}
                             </td>
                             <td className="p-3 flex flex-wrap gap-2 mt-2">
                               {Array.isArray(app["Conditions"]) ? (
